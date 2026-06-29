@@ -1,0 +1,1446 @@
+cat > /mnt/user-data/outputs/portal_engenharias_ufc.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal das Engenharias UFC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & TOKENS ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue:       #003E7E;
+  --blue-dark:  #00264D;
+  --blue-light: #E8F0FB;
+  --gold:       #C8A034;
+  --gold-light: #FDF6E3;
+  --green:      #2E7D32;
+  --green-light:#E8F5E9;
+  --gray-bg:    #F4F6F9;
+  --gray-200:   #E8ECF0;
+  --gray-400:   #9AA3B0;
+  --gray-600:   #666E7A;
+  --text:       #1A2233;
+  --text-soft:  #5A6478;
+  --white:      #FFFFFF;
+  --shadow-sm:  0 2px 8px rgba(0,0,0,.06);
+  --shadow-md:  0 4px 20px rgba(0,0,0,.10);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.14);
+  --radius:     16px;
+  --radius-sm:  10px;
+  --nav-h:      68px;
+  --transition: .25s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="dark"] {
+  --blue-light: #0d2540;
+  --gold-light: #1a1400;
+  --green-light:#0a1f0a;
+  --gray-bg:    #0e1420;
+  --gray-200:   #1e2535;
+  --gray-400:   #4a5568;
+  --gray-600:   #8a94a6;
+  --text:       #EDF0F5;
+  --text-soft:  #8a94a6;
+  --white:      #151d2e;
+  --shadow-sm:  0 2px 8px rgba(0,0,0,.4);
+  --shadow-md:  0 4px 20px rgba(0,0,0,.5);
+}
+html { scroll-behavior: smooth; }
+body { font-family:'Inter',sans-serif; color:var(--text); background:var(--gray-bg); line-height:1.6; -webkit-font-smoothing:antialiased; transition:background var(--transition),color var(--transition); }
+h1,h2,h3,h4,h5 { font-family:'Poppins',sans-serif; line-height:1.2; }
+a { text-decoration:none; color:inherit; }
+img { max-width:100%; display:block; }
+button { cursor:pointer; font-family:inherit; border:none; background:none; }
+ul { list-style:none; }
+
+/* ─── SCROLLBAR ─────────────────────────────────────────────────── */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--gray-bg); }
+::-webkit-scrollbar-thumb { background:var(--gray-400); border-radius:3px; }
+
+/* ─── NAVBAR ─────────────────────────────────────────────────────── */
+.navbar {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  height:var(--nav-h);
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid var(--gray-200);
+  transition:all var(--transition);
+}
+[data-theme="dark"] .navbar {
+  background:rgba(14,20,32,.88);
+}
+.nav-inner {
+  max-width:1280px; margin:0 auto; padding:0 24px;
+  height:100%; display:flex; align-items:center; gap:8px;
+}
+.nav-logo {
+  font-family:'Poppins',sans-serif; font-weight:800; font-size:1.05rem;
+  color:var(--blue); letter-spacing:-.3px; margin-right:24px; white-space:nowrap;
+}
+.nav-logo span { color:var(--gold); }
+.nav-links { display:flex; align-items:center; gap:4px; flex:1; }
+.nav-link {
+  padding:7px 13px; border-radius:8px; font-size:.82rem; font-weight:500;
+  color:var(--text-soft); transition:all var(--transition); white-space:nowrap;
+}
+.nav-link:hover, .nav-link.active { background:var(--blue-light); color:var(--blue); }
+.nav-actions { display:flex; align-items:center; gap:8px; margin-left:auto; }
+.search-btn {
+  width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+  background:var(--gray-bg); color:var(--text-soft); transition:all var(--transition); border:1px solid var(--gray-200);
+}
+.search-btn:hover { background:var(--blue-light); color:var(--blue); }
+.dark-toggle {
+  width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+  background:var(--gray-bg); color:var(--text-soft); transition:all var(--transition); border:1px solid var(--gray-200);
+}
+.dark-toggle:hover { background:var(--blue-light); color:var(--blue); }
+.btn-meu-curso {
+  padding:8px 16px; border-radius:8px; font-size:.82rem; font-weight:600;
+  background:var(--blue); color:#fff; transition:all var(--transition);
+  box-shadow:0 2px 8px rgba(0,62,126,.25);
+}
+.btn-meu-curso:hover { background:var(--blue-dark); transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,62,126,.35); }
+.hamburger { display:none; flex-direction:column; gap:5px; padding:8px; }
+.hamburger span { display:block; width:22px; height:2px; background:var(--text); border-radius:2px; transition:all var(--transition); }
+
+/* ─── SEARCH OVERLAY ─────────────────────────────────────────────── */
+.search-overlay {
+  position:fixed; inset:0; z-index:2000;
+  background:rgba(0,0,0,.5); backdrop-filter:blur(4px);
+  display:none; align-items:flex-start; justify-content:center; padding-top:120px;
+}
+.search-overlay.open { display:flex; }
+.search-box {
+  width:100%; max-width:600px; background:var(--white); border-radius:20px;
+  padding:20px; box-shadow:var(--shadow-lg); animation:slideDown .2s ease;
+}
+@keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+.search-input-wrap { display:flex; align-items:center; gap:12px; padding:4px 0; border-bottom:2px solid var(--blue); }
+.search-input { flex:1; border:none; outline:none; font-size:1.1rem; font-family:inherit; background:transparent; color:var(--text); }
+.search-input::placeholder { color:var(--gray-400); }
+.search-quick { margin-top:16px; }
+.search-quick p { font-size:.75rem; font-weight:600; color:var(--gray-400); text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
+.search-tags { display:flex; flex-wrap:wrap; gap:8px; }
+.search-tag {
+  padding:6px 14px; border-radius:20px; background:var(--blue-light); color:var(--blue);
+  font-size:.8rem; font-weight:500; cursor:pointer; transition:all var(--transition);
+}
+.search-tag:hover { background:var(--blue); color:#fff; }
+
+/* ─── HERO ───────────────────────────────────────────────────────── */
+.hero {
+  min-height:100vh; display:flex; align-items:center;
+  background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 50%, #0a4f9a 100%);
+  position:relative; overflow:hidden; padding-top:var(--nav-h);
+}
+.hero-grid {
+  position:absolute; inset:0; opacity:.06;
+  background-image:
+    linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.hero-glow {
+  position:absolute; width:600px; height:600px; border-radius:50%;
+  background:radial-gradient(circle, rgba(200,160,52,.15) 0%, transparent 70%);
+  top:-100px; right:-100px; pointer-events:none;
+}
+.hero-glow2 {
+  position:absolute; width:400px; height:400px; border-radius:50%;
+  background:radial-gradient(circle, rgba(46,125,50,.1) 0%, transparent 70%);
+  bottom:-50px; left:100px; pointer-events:none;
+}
+.hero-inner {
+  max-width:1280px; margin:0 auto; padding:80px 24px;
+  display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
+}
+.hero-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:6px 14px; background:rgba(200,160,52,.15); border:1px solid rgba(200,160,52,.3);
+  border-radius:20px; font-size:.8rem; color:var(--gold); font-weight:600; margin-bottom:24px;
+}
+.hero-badge::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--gold); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+.hero-title {
+  font-size:clamp(2.2rem,5vw,3.8rem); font-weight:900; color:#fff; line-height:1.08;
+  letter-spacing:-.03em; margin-bottom:20px;
+}
+.hero-title span { color:var(--gold); }
+.hero-subtitle { font-size:1.05rem; color:rgba(255,255,255,.7); line-height:1.7; margin-bottom:36px; max-width:480px; }
+.hero-btns { display:flex; gap:14px; flex-wrap:wrap; }
+.btn-primary {
+  padding:14px 28px; background:var(--gold); color:var(--blue-dark);
+  border-radius:12px; font-weight:700; font-size:.95rem;
+  transition:all var(--transition); box-shadow:0 4px 20px rgba(200,160,52,.4);
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(200,160,52,.5); }
+.btn-outline-white {
+  padding:14px 28px; border:2px solid rgba(255,255,255,.25); color:#fff;
+  border-radius:12px; font-weight:600; font-size:.95rem;
+  transition:all var(--transition);
+}
+.btn-outline-white:hover { background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.5); transform:translateY(-2px); }
+.hero-visual {
+  display:flex; align-items:center; justify-content:center; position:relative;
+}
+.hero-card-stack { position:relative; width:100%; max-width:440px; }
+.hero-main-card {
+  background:rgba(255,255,255,.1); backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.15); border-radius:24px;
+  padding:32px; color:#fff;
+}
+.hero-stats { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:24px; }
+.hero-stat { text-align:center; }
+.hero-stat-num { font-family:'Poppins',sans-serif; font-size:2rem; font-weight:800; color:var(--gold); }
+.hero-stat-label { font-size:.75rem; color:rgba(255,255,255,.6); margin-top:2px; }
+.hero-floating {
+  position:absolute; background:rgba(255,255,255,.12); backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.2); border-radius:14px;
+  padding:12px 18px; color:#fff; font-size:.82rem; font-weight:500;
+  display:flex; align-items:center; gap:10px; white-space:nowrap;
+}
+.hero-floating.f1 { top:-20px; right:-20px; animation:float 4s ease-in-out infinite; }
+.hero-floating.f2 { bottom:-20px; right:40px; animation:float 4s ease-in-out infinite .5s; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.hero-scroll { position:absolute; bottom:36px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; color:rgba(255,255,255,.4); font-size:.75rem; }
+.scroll-line { width:1px; height:40px; background:linear-gradient(transparent,rgba(255,255,255,.4)); animation:scrollLine 1.5s ease-in-out infinite; }
+@keyframes scrollLine { 0%{opacity:0;transform:scaleY(0) translateY(-100%)} 50%{opacity:1} 100%{opacity:0;transform:scaleY(1) translateY(0)} }
+
+/* ─── SECTIONS ───────────────────────────────────────────────────── */
+section { padding:80px 0; }
+.container { max-width:1280px; margin:0 auto; padding:0 24px; }
+.section-label {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em;
+  color:var(--blue); background:var(--blue-light); padding:5px 14px; border-radius:20px;
+  margin-bottom:14px;
+}
+.section-title { font-size:clamp(1.8rem,3.5vw,2.6rem); font-weight:800; color:var(--text); margin-bottom:12px; }
+.section-subtitle { font-size:1rem; color:var(--text-soft); max-width:560px; line-height:1.7; margin-bottom:40px; }
+.section-header { margin-bottom:48px; }
+
+/* ─── QUICK ACCESS ───────────────────────────────────────────────── */
+.quick-access { background:var(--white); border-top:1px solid var(--gray-200); }
+.quick-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(110px, 1fr));
+  gap:12px;
+}
+.quick-item {
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  padding:20px 12px; border-radius:var(--radius); background:var(--gray-bg);
+  border:1px solid var(--gray-200); cursor:pointer;
+  transition:all var(--transition); text-align:center;
+}
+.quick-item:hover { background:var(--blue-light); border-color:var(--blue); transform:translateY(-3px); box-shadow:var(--shadow-md); }
+.quick-item:hover .qi-icon { background:var(--blue); color:#fff; }
+.quick-item:hover .qi-label { color:var(--blue); }
+.qi-icon {
+  width:44px; height:44px; border-radius:12px; background:var(--white);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; transition:all var(--transition);
+  box-shadow:var(--shadow-sm); border:1px solid var(--gray-200);
+}
+.qi-label { font-size:.78rem; font-weight:600; color:var(--text-soft); transition:color var(--transition); }
+
+/* ─── COURSES ────────────────────────────────────────────────────── */
+.courses-section { background:var(--gray-bg); }
+.courses-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:20px;
+}
+.course-card {
+  background:var(--white); border-radius:var(--radius); padding:24px;
+  border:1px solid var(--gray-200); cursor:pointer;
+  transition:all var(--transition); position:relative; overflow:hidden;
+}
+.course-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg, var(--blue), var(--gold));
+  transform:scaleX(0); transform-origin:left; transition:transform var(--transition);
+}
+.course-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:transparent; }
+.course-card:hover::before { transform:scaleX(1); }
+.course-icon { font-size:2rem; margin-bottom:14px; }
+.course-name { font-family:'Poppins',sans-serif; font-weight:700; font-size:1rem; color:var(--text); margin-bottom:8px; }
+.course-meta { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.course-tag {
+  font-size:.72rem; font-weight:600; padding:3px 10px; border-radius:20px;
+  background:var(--blue-light); color:var(--blue);
+}
+.course-tag.green { background:var(--green-light); color:var(--green); }
+.course-tag.gold { background:var(--gold-light); color:#8B6914; }
+.course-desc { font-size:.85rem; color:var(--text-soft); line-height:1.6; }
+.course-arrow { position:absolute; bottom:20px; right:20px; color:var(--gray-400); font-size:1.2rem; transition:all var(--transition); }
+.course-card:hover .course-arrow { color:var(--blue); transform:translate(3px,-3px); }
+
+/* ─── MEU CURSO ──────────────────────────────────────────────────── */
+.meu-curso-section {
+  background:linear-gradient(135deg,var(--blue-dark),var(--blue));
+  padding:80px 0; position:relative; overflow:hidden;
+}
+.meu-curso-section::before {
+  content:''; position:absolute; inset:0; opacity:.04;
+  background-image:radial-gradient(circle,#fff 1px,transparent 1px);
+  background-size:30px 30px;
+}
+.meu-curso-inner { position:relative; z-index:1; text-align:center; }
+.meu-curso-inner .section-label { background:rgba(200,160,52,.2); color:var(--gold); border:1px solid rgba(200,160,52,.3); }
+.meu-curso-inner .section-title { color:#fff; }
+.meu-curso-inner .section-subtitle { color:rgba(255,255,255,.65); margin:0 auto 40px; }
+.curso-selector {
+  display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:32px;
+}
+.curso-chip {
+  padding:10px 20px; border-radius:10px; font-size:.85rem; font-weight:600;
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.8); cursor:pointer; transition:all var(--transition);
+}
+.curso-chip:hover, .curso-chip.active {
+  background:var(--gold); border-color:var(--gold); color:var(--blue-dark);
+}
+.my-course-card {
+  max-width:800px; margin:0 auto; background:rgba(255,255,255,.06);
+  backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.12);
+  border-radius:24px; padding:32px; display:none;
+}
+.my-course-card.active { display:block; animation:fadeIn .3s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.my-course-header { display:flex; align-items:center; gap:16px; margin-bottom:24px; }
+.my-course-icon { font-size:2.5rem; }
+.my-course-name { font-family:'Poppins',sans-serif; font-size:1.4rem; font-weight:800; color:#fff; }
+.my-course-dept { font-size:.85rem; color:rgba(255,255,255,.5); margin-top:2px; }
+.my-course-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.my-course-item {
+  background:rgba(255,255,255,.08); border-radius:12px; padding:16px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.my-course-item-title { font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); margin-bottom:6px; }
+.my-course-item-val { font-size:.88rem; color:rgba(255,255,255,.8); font-weight:500; }
+
+/* ─── ACADEMIC LIFE ──────────────────────────────────────────────── */
+.academic-section { background:var(--white); }
+.academic-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; }
+.academic-card {
+  border:1px solid var(--gray-200); border-radius:var(--radius); padding:22px;
+  background:var(--gray-bg); transition:all var(--transition); display:block;
+  position:relative; overflow:hidden;
+}
+.academic-card:hover { border-color:var(--blue); background:var(--blue-light); transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.academic-card:hover .ac-icon { background:var(--blue); }
+.academic-card:hover .ac-arrow { opacity:1; }
+.ac-icon {
+  width:42px; height:42px; border-radius:10px; background:var(--blue-light);
+  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+  margin-bottom:14px; transition:background var(--transition);
+}
+.ac-title { font-weight:700; font-size:.92rem; color:var(--text); margin-bottom:6px; }
+.ac-desc { font-size:.8rem; color:var(--text-soft); line-height:1.5; }
+.ac-arrow { position:absolute; top:18px; right:18px; color:var(--blue); font-size:.9rem; opacity:0; transition:opacity var(--transition); }
+
+/* ─── BOLSAS ─────────────────────────────────────────────────────── */
+.bolsas-section { background:var(--gray-bg); }
+.bolsas-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:20px; }
+.bolsa-card {
+  background:var(--white); border-radius:var(--radius); padding:24px;
+  border:1px solid var(--gray-200); transition:all var(--transition); cursor:pointer;
+}
+.bolsa-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); border-color:var(--gold); }
+.bolsa-badge {
+  display:inline-block; padding:4px 12px; border-radius:20px; font-size:.72rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:.06em; background:var(--gold-light); color:#8B6914; margin-bottom:14px;
+}
+.bolsa-badge.blue { background:var(--blue-light); color:var(--blue); }
+.bolsa-badge.green { background:var(--green-light); color:var(--green); }
+.bolsa-name { font-family:'Poppins',sans-serif; font-size:1rem; font-weight:700; color:var(--text); margin-bottom:8px; }
+.bolsa-desc { font-size:.83rem; color:var(--text-soft); line-height:1.6; }
+
+/* ─── SAÚDE ──────────────────────────────────────────────────────── */
+.saude-section { background:var(--white); }
+.saude-banner {
+  background:linear-gradient(135deg, #1a3a4a, #0d2535);
+  border-radius:24px; padding:48px; text-align:center; margin-bottom:48px;
+  position:relative; overflow:hidden;
+}
+.saude-banner::before {
+  content:''; position:absolute; inset:0; opacity:.08;
+  background-image:radial-gradient(circle at 20% 80%, #fff 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, #2E7D32 0%, transparent 50%);
+}
+.saude-banner-title { font-family:'Poppins',sans-serif; font-size:clamp(1.6rem,3vw,2.2rem); font-weight:800; color:#fff; margin-bottom:12px; position:relative; }
+.saude-banner-sub { color:rgba(255,255,255,.6); max-width:520px; margin:0 auto; line-height:1.7; position:relative; }
+.saude-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
+.saude-card {
+  border-radius:var(--radius); padding:24px;
+  border:1px solid var(--gray-200); background:var(--gray-bg);
+  transition:all var(--transition); cursor:pointer;
+}
+.saude-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); border-color:var(--green); }
+.saude-card-icon { font-size:2rem; margin-bottom:14px; }
+.saude-card-name { font-weight:700; font-size:.95rem; color:var(--text); margin-bottom:8px; }
+.saude-card-desc { font-size:.82rem; color:var(--text-soft); line-height:1.6; margin-bottom:14px; }
+.saude-card-contact { font-size:.78rem; color:var(--green); font-weight:600; display:flex; align-items:center; gap:6px; }
+
+/* ─── SERVICES ───────────────────────────────────────────────────── */
+.services-section { background:var(--gray-bg); }
+.services-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+  gap:24px;
+  align-items:stretch;
+}
+.service-card {
+  background:var(--white); border-radius:18px; overflow:hidden;
+  border:1px solid var(--gray-200); transition:all var(--transition);
+  display:flex; flex-direction:column;
+  height:100%;
+}
+.service-card:hover { border-color:var(--blue); }
+.service-card-head {
+  padding:24px; min-height:115px;
+  display:flex; align-items:flex-start; gap:16px;
+}
+.service-icon { font-size:1.8rem; }
+.service-name { font-weight:700; font-size:.95rem; color:var(--text); }
+.service-card-content { padding:24px; border-top:1px solid var(--gray-200); display:flex; flex-direction:column; gap:18px; flex:1; font-size:.83rem; color:var(--text-soft); }
+.service-card-content p { margin:0; line-height:1.7; }
+.service-links { margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding-top:18px; }
+.service-link { display:inline-flex; align-items:center; gap:6px; color:var(--blue); font-size:.8rem; font-weight:600; }
+.service-link:hover { text-decoration: underline; }
+
+/* ─── FERRAMENTAS ────────────────────────────────────────────────── */
+.tools-section { background:var(--white); }
+.tools-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:14px; }
+.tool-card {
+  border:1px solid var(--gray-200); border-radius:var(--radius-sm); padding:18px;
+  background:var(--gray-bg); transition:all var(--transition); cursor:pointer; text-align:center;
+}
+.tool-card:hover { border-color:var(--blue); background:var(--blue-light); transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.tool-icon { font-size:1.8rem; margin-bottom:10px; }
+.tool-name { font-weight:700; font-size:.85rem; color:var(--text); margin-bottom:4px; }
+.tool-type { font-size:.72rem; color:var(--text-soft); }
+
+/* ─── EVENTS TICKER ──────────────────────────────────────────────── */
+.ticker-wrap {
+  background:var(--blue); padding:12px 0; overflow:hidden; white-space:nowrap;
+}
+.ticker-inner { display:inline-flex; animation:ticker 30s linear infinite; }
+.ticker-item {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:0 40px; font-size:.82rem; color:rgba(255,255,255,.8); font-weight:500;
+}
+.ticker-dot { width:6px; height:6px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ─── CONTATOS ───────────────────────────────────────────────────── */
+.contatos-section { background:var(--gray-bg); }
+.contatos-grid {
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:16px;
+  align-items: stretch;
+}
+.contato-card {
+  background:var(--white); border-radius:var(--radius); padding:16px;
+  border:1px solid var(--gray-200);
+}
+.contato-card-head { display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid var(--gray-200); }
+.contato-icon { width:44px; height:44px; border-radius:10px; background:var(--blue-light); display:flex; align-items:center; justify-content:center; font-size:1.3rem; }
+.contato-title { font-weight:700; color:var(--text); font-size:.85rem; }
+.contato-subtitle { font-size:.75rem; color:var(--text-soft); margin-top:2px; }
+.contato-items { display:flex; flex-direction:column; gap:10px; }
+.contato-item { display:flex; align-items:flex-start; gap:10px; }
+.contato-item-icon { font-size:.9rem; color:var(--blue); margin-top:2px; flex-shrink:0; }
+.contato-item-text { font-size:.8rem; color:var(--text-soft); line-height:1.5; }
+.contato-item-text a { color:var(--blue); }
+
+/* ─── MAPA ───────────────────────────────────────────────────────── */
+.map-section { background:var(--white); }
+.map-container {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-md);
+  height: 500px;
+}
+
+/* ─── COURSE MODAL ───────────────────────────────────────────────── */
+.modal-overlay {
+  position:fixed; inset:0; z-index:3000; background:rgba(0,0,0,.6);
+  backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; padding:20px;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background:var(--white); border-radius:24px; width:100%; max-width:880px;
+  max-height:90vh; overflow-y:auto; animation:slideDown .25s ease;
+  box-shadow:var(--shadow-lg);
+}
+.modal-header {
+  padding:32px 32px 0; display:flex; justify-content:space-between; align-items:flex-start;
+}
+.modal-close {
+  width:36px; height:36px; border-radius:50%; background:var(--gray-bg);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.2rem; color:var(--text-soft); cursor:pointer; flex-shrink:0;
+  transition:all var(--transition);
+}
+.modal-close:hover { background:var(--gray-200); }
+.modal-body { padding:24px 32px 32px; }
+.modal-course-icon { font-size:3rem; margin-bottom:8px; }
+.modal-course-name { font-family:'Poppins',sans-serif; font-size:1.6rem; font-weight:800; color:var(--text); margin-bottom:6px; }
+.modal-course-tags { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+.modal-section-title { font-weight:700; color:var(--text); margin-bottom:14px; font-size:.95rem; display:flex; align-items:center; gap:8px; }
+.modal-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:28px; }
+.modal-info-card { background:var(--gray-bg); border-radius:10px; padding:14px; border:1px solid var(--gray-200); }
+.modal-info-label { font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-soft); margin-bottom:4px; }
+.modal-info-val { font-size:.88rem; font-weight:600; color:var(--text); }
+.modal-orgs { display:flex; flex-direction:column; gap:10px; margin-bottom:28px; }
+.modal-org { display:flex; align-items:center; gap:14px; padding:14px; background:var(--gray-bg); border-radius:10px; border:1px solid var(--gray-200); }
+.modal-org-icon { font-size:1.4rem; }
+.modal-org-name { font-weight:700; font-size:.88rem; color:var(--text); }
+.modal-org-type { font-size:.75rem; color:var(--text-soft); }
+.modal-org-link { margin-left:auto; font-size:.78rem; color:var(--blue); font-weight:600; }
+.modal-placeholder {
+  background:var(--blue-light); border-radius:12px; padding:20px; text-align:center;
+  border:2px dashed rgba(0,62,126,.2); color:var(--blue); font-size:.85rem;
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────────────── */
+footer {
+  background:var(--blue-dark); color:rgba(255,255,255,.7); padding:56px 0 0;
+}
+.footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; margin-bottom:40px; }
+.footer-logo { font-family:'Poppins',sans-serif; font-weight:800; font-size:1.2rem; color:#fff; margin-bottom:12px; }
+.footer-logo span { color:var(--gold); }
+.footer-about { font-size:.84rem; line-height:1.7; margin-bottom:16px; }
+.footer-social { display:flex; gap:10px; }
+.footer-social a {
+  width:34px; height:34px; border-radius:8px; background:rgba(255,255,255,.08);
+  display:flex; align-items:center; justify-content:center;
+  color:rgba(255,255,255,.6); font-size:.9rem; transition:all var(--transition);
+}
+.footer-social a:hover { background:var(--blue); color:#fff; }
+.footer-col h4 { font-family:'Poppins',sans-serif; font-size:.85rem; font-weight:700; color:#fff; margin-bottom:14px; text-transform:uppercase; letter-spacing:.08em; }
+.footer-links { display:flex; flex-direction:column; gap:8px; }
+.footer-links a { font-size:.83rem; color:rgba(255,255,255,.55); transition:color var(--transition); }
+.footer-links a:hover { color:#fff; }
+.footer-bottom {
+  border-top:1px solid rgba(255,255,255,.08); padding:20px 0;
+  display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap;
+}
+.footer-disclaimer { font-size:.75rem; color:rgba(255,255,255,.35); line-height:1.6; flex:1; min-width:280px; }
+.footer-copy { font-size:.75rem; color:rgba(255,255,255,.3); text-align:right; }
+
+/* ─── PAGE SECTIONS (detail) ─────────────────────────────────────── */
+.page-hero {
+  background:linear-gradient(135deg,var(--blue-dark),var(--blue));
+  padding:100px 0 60px; color:#fff;
+}
+.page-hero-label { font-size:.8rem; font-weight:600; color:rgba(255,255,255,.5); margin-bottom:8px; text-transform:uppercase; letter-spacing:.08em; }
+.page-hero-title { font-size:2.4rem; font-weight:800; margin-bottom:12px; }
+.page-hero-sub { font-size:1rem; color:rgba(255,255,255,.65); max-width:560px; line-height:1.7; }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────── */
+@media(max-width:1024px){
+  .footer-grid { grid-template-columns:1fr 1fr; }
+  .nav-links { display:none; }
+  .hamburger { display:flex; }
+}
+@media(max-width:768px){
+  .hero-inner { grid-template-columns:1fr; padding:60px 24px; }
+  .hero-visual { display:none; }
+  .my-course-grid { grid-template-columns:1fr 1fr; }
+  .contatos-grid { grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); }
+  .footer-grid { grid-template-columns:1fr; gap:28px; }
+  section { padding:56px 0; }
+  .modal-header,.modal-body { padding-left:24px; padding-right:24px; }
+}
+@media(max-width:480px){
+  .quick-grid { grid-template-columns:repeat(4,1fr); }
+  .my-course-grid { grid-template-columns:1fr; }
+  .hero-btns { flex-direction:column; }
+}
+
+/* ─── MOBILE MENU ────────────────────────────────────────────────── */
+.mobile-menu {
+  position:fixed; top:var(--nav-h); left:0; right:0; bottom:0; z-index:999;
+  background:var(--white); padding:24px; display:none; flex-direction:column; gap:6px;
+  overflow-y:auto;
+}
+.mobile-menu.open { display:flex; }
+.mobile-link {
+  padding:14px 16px; border-radius:10px; font-size:.95rem; font-weight:500;
+  color:var(--text-soft); transition:all var(--transition); display:block;
+}
+.mobile-link:hover { background:var(--blue-light); color:var(--blue); }
+
+/* ─── ANNOUNCE BAR ───────────────────────────────────────────────── */
+.announce-bar {
+  background:var(--gold); padding:8px 0; text-align:center;
+  font-size:.78rem; font-weight:600; color:var(--blue-dark);
+  position:fixed; top:0; left:0; right:0; z-index:1001;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">Portal<span>Eng</span> UFC</div>
+    <div class="nav-links">
+      <a href="#home" class="nav-link active" onclick="setActive(this)">Início</a>
+      <a href="#cursos" class="nav-link" onclick="setActive(this)">Cursos</a>
+      <a href="#vida-academica" class="nav-link" onclick="setActive(this)">Vida Acadêmica</a>
+      <a href="#bolsas" class="nav-link" onclick="setActive(this)">Bolsas</a>
+      <a href="#saude" class="nav-link" onclick="setActive(this)">Saúde</a>
+      <a href="#servicos" class="nav-link" onclick="setActive(this)">Serviços</a>
+      <a href="#ferramentas" class="nav-link" onclick="setActive(this)">Ferramentas</a>
+      <a href="#contatos" class="nav-link" onclick="setActive(this)">Contatos</a>
+    </div>
+    <div class="nav-actions">
+      <button class="search-btn" onclick="toggleSearch()" title="Pesquisar">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="dark-toggle" onclick="toggleDark()" title="Modo escuro">
+        <svg id="dark-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <a href="#meu-curso" class="btn-meu-curso">Meu Curso</a>
+      <button class="hamburger" onclick="toggleMobile()" id="hamburger">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#home" class="mobile-link" onclick="closeMobile()">🏠 Início</a>
+  <a href="#cursos" class="mobile-link" onclick="closeMobile()">🎓 Cursos</a>
+  <a href="#vida-academica" class="mobile-link" onclick="closeMobile()">📚 Vida Acadêmica</a>
+  <a href="#bolsas" class="mobile-link" onclick="closeMobile()">💰 Bolsas e Auxílios</a>
+  <a href="#saude" class="mobile-link" onclick="closeMobile()">💚 Saúde Mental</a>
+  <a href="#servicos" class="mobile-link" onclick="closeMobile()">🍽️ Serviços</a>
+  <a href="#ferramentas" class="mobile-link" onclick="closeMobile()">🛠️ Ferramentas</a>
+  <a href="#meu-curso" class="mobile-link" onclick="closeMobile()">⭐ Meu Curso</a>
+  <a href="#contatos" class="mobile-link" onclick="closeMobile()">📞 Contatos</a>
+</div>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay" onclick="closeSearch(event)">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg width="20" height="20" fill="none" stroke="#003E7E" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="search-input" placeholder="Pesquisar cursos, laboratórios, bolsas..." id="search-input">
+      <button onclick="toggleSearch()" style="color:#9AA3B0;font-size:1.2rem">✕</button>
+    </div>
+    <div class="search-quick">
+      <p>Atalhos rápidos</p>
+      <div class="search-tags">
+        <span class="search-tag" onclick="gotoSection('cursos')">Cursos</span>
+        <span class="search-tag" onclick="gotoSection('bolsas')">Bolsas</span>
+        <span class="search-tag" onclick="gotoSection('saude')">Saúde Mental</span>
+        <span class="search-tag" onclick="gotoSection('servicos')">Restaurante RU</span>
+        <span class="search-tag" onclick="gotoSection('vida-academica')">SIGAA</span>
+        <span class="search-tag" onclick="gotoSection('ferramentas')">Ferramentas</span>
+        <span class="search-tag" onclick="gotoSection('meu-curso')">Meu Curso</span>
+        <span class="search-tag" onclick="gotoSection('contatos')">Contatos</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-inner container">
+    <div class="hero-content">
+      <div class="hero-badge">Portal independente · Campus do Pici · UFC</div>
+      <h1 class="hero-title">Onde nascem<br>os <span>engenheiros.</span></h1>
+      <p class="hero-subtitle">Informações acadêmicas, cursos, laboratórios, bolsas, saúde e tudo que você precisa para a sua vida na Engenharia da UFC — em um único lugar.</p>
+      <div class="hero-btns">
+        <a href="#cursos" class="btn-primary">Conhecer os Cursos →</a>
+        <a href="#meu-curso" class="btn-outline-white">Meu Curso</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <div class="hero-main-card">
+          <div style="font-size:.75rem;color:rgba(255,255,255,.5);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Campus do Pici · Fortaleza</div>
+          <div style="font-family:'Poppins',sans-serif;font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:6px;">Engenharias da UFC</div>
+          <div style="font-size:.85rem;color:rgba(255,255,255,.6);">12 cursos · Centro de Tecnologia</div>
+          <div class="hero-stats">
+            <div class="hero-stat"><div class="hero-stat-num">12</div><div class="hero-stat-label">Cursos de Engenharia</div></div>
+            <div class="hero-stat"><div class="hero-stat-num">70+</div><div class="hero-stat-label">Anos de tradição</div></div>
+            <div class="hero-stat"><div class="hero-stat-num">5k+</div><div class="hero-stat-label">Alunos no CT</div></div>
+            <div class="hero-stat"><div class="hero-stat-num">100+</div><div class="hero-stat-label">Labs & Grupos</div></div>
+          </div>
+        </div>
+        <div class="hero-floating f1">📡 Intercampi disponível</div>
+        <div class="hero-floating f2">🍽️ RU · R$ 1,10 por refeição</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span>Explorar</span></div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span class="ticker-dot"></span>Auxílio Ingressante: R$ 500/mês para cotistas de baixa renda</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>RU: refeição a R$ 1,10 com recarga no cartão</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Biblioteca Central (BCCP): Av. Mister Hull · @bccpufc</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Intercampi: transporte gratuito Pici ↔ Benfica ↔ Porangabuçu</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>PIBIC: bolsas de iniciação científica disponíveis — fique atento aos editais</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Auxílio Ingressante: R$ 500/mês para cotistas de baixa renda</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>RU: refeição a R$ 1,10 com recarga no cartão</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Biblioteca Central (BCCP): Av. Mister Hull · @bccpufc</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Intercampi: transporte gratuito Pici ↔ Benfica ↔ Porangabuçu</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>PIBIC: bolsas de iniciação científica disponíveis — fique atento aos editais</span>
+  </div>
+</div>
+
+<!-- CURSOS -->
+<section class="courses-section" id="cursos">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">🎓 Engenharias</div>
+      <h2 class="section-title">Escolha o seu caminho</h2>
+      <p class="section-subtitle">O Campus do Pici reúne 12 cursos de Engenharia. Clique em um curso para saber mais sobre grade, laboratórios e organizações estudantis.</p>
+    </div>
+    <div class="courses-grid" id="courses-grid"></div>
+  </div>
+</section>
+
+<!-- MEU CURSO -->
+<section class="meu-curso-section" id="meu-curso">
+  <div class="container">
+    <div class="meu-curso-inner">
+      <div class="section-label">⭐ Personalizado</div>
+      <h2 class="section-title">Meu Curso</h2>
+      <p class="section-subtitle">Selecione o seu curso e veja as informações direto para você. Sua preferência é salva no navegador.</p>
+      <div class="curso-selector" id="curso-selector"></div>
+      <div id="my-course-display"></div>
+      <div id="my-course-placeholder" style="color:rgba(255,255,255,.45);font-size:.9rem;padding:24px;">
+        ← Selecione seu curso acima para ver informações personalizadas
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDA ACADÊMICA -->
+<section class="academic-section" id="vida-academica">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">📚 Vida Acadêmica</div>
+      <h2 class="section-title">Tudo que você precisa saber</h2>
+      <p class="section-subtitle">Sistemas, documentos e recursos essenciais para navegar bem pela vida universitária na UFC.</p>
+    </div>
+    <div class="academic-grid">
+      <a href="https://si3.ufc.br" target="_blank" class="academic-card">
+        <div class="ac-icon">🖥️</div>
+        <div class="ac-title">SIGAA</div>
+        <div class="ac-desc">Acesse notas, frequência, documentos, matrícula e histórico acadêmico.</div>
+        <div class="ac-arrow">↗</div>
+      </a>
+      <a href="https://webmail.ufc.br" target="_blank" class="academic-card">
+        <div class="ac-icon">📧</div>
+        <div class="ac-title">E-mail Institucional</div>
+        <div class="ac-desc">Conta @alu.ufc.br com Google Workspace: Drive, Gmail, Agenda.</div>
+        <div class="ac-arrow">↗</div>
+      </a>
+      <a href="https://pergamum.ufc.br" target="_blank" class="academic-card">
+        <div class="ac-icon">📖</div>
+        <div class="ac-title">Biblioteca / Pergamum</div>
+        <div class="ac-desc">Consulte o acervo, renove empréstimos e acesse o Portal CAPES.</div>
+        <div class="ac-arrow">↗</div>
+      </a>
+      <a href="https://www.ufc.br/calendario-universitario/2026" target="_blank" class="academic-card">
+        <div class="ac-icon">📅</div>
+        <div class="ac-title">Calendário 2026</div>
+        <div class="ac-desc">Datas de matrículas, semestres, férias, avaliações e colações de grau.</div>
+        <div class="ac-arrow">↗</div>
+      </a>
+      <div class="academic-card" onclick="showModal('sigaa-ira')">
+        <div class="ac-icon">📊</div>
+        <div class="ac-title">IRA — Índice de Rendimento</div>
+        <div class="ac-desc">Entenda como é calculado e como acompanhar pelo SIGAA.</div>
+        <div class="ac-arrow">→</div>
+      </div>
+      <div class="academic-card" onclick="showModal('sigaa-freq')">
+        <div class="ac-icon">✅</div>
+        <div class="ac-title">Frequência</div>
+        <div class="ac-desc">Mínimo de 75% por disciplina. Saiba como consultar as faltas.</div>
+        <div class="ac-arrow">→</div>
+      </div>
+      <div class="academic-card" onclick="showModal('sigaa-docs')">
+        <div class="ac-icon">📄</div>
+        <div class="ac-title">Documentos</div>
+        <div class="ac-desc">Atestado de Matrícula, Histórico Escolar e Declaração de Vínculo.</div>
+        <div class="ac-arrow">→</div>
+      </div>
+      <div class="academic-card" onclick="showModal('sigaa-mat')">
+        <div class="ac-icon">📝</div>
+        <div class="ac-title">Matrícula Online</div>
+        <div class="ac-desc">Como se matricular nas disciplinas para o próximo semestre.</div>
+        <div class="ac-arrow">→</div>
+      </div>
+      <a href="https://www.ufc.br" target="_blank" class="academic-card">
+        <div class="ac-icon">🌐</div>
+        <div class="ac-title">Site Oficial UFC</div>
+        <div class="ac-desc">Portal institucional com notícias, editais e informações oficiais.</div>
+        <div class="ac-arrow">↗</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- BOLSAS -->
+<section class="bolsas-section" id="bolsas">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">💰 Bolsas & Auxílios</div>
+      <h2 class="section-title">Apoio financeiro e acadêmico</h2>
+      <p class="section-subtitle">A UFC oferece diversas modalidades de apoio a estudantes. Fique atento aos editais no Instagram <a href="https://www.instagram.com/praeufc/?hl=en" target="_blank" style="color:var(--blue);font-weight:600;">@praeufc</a>.</p>
+    </div>
+    <div class="bolsas-grid">
+      <a href="https://prae.ufc.br/pt/auxilios-e-bolsas-estudantis/auxilio-ingressante/" target="_blank" class="bolsa-card">
+        <div class="bolsa-badge gold">Financeiro</div>
+        <div class="bolsa-name">Auxílio Ingressante</div>
+        <div class="bolsa-desc">R$ 500/mês para estudantes aprovados via SISU por cotas de baixa renda. Inclui isenção automática no RU.</div>
+      </a>
+      <a href="https://prae.ufc.br/pt/auxilios-e-bolsas-estudantis/auxilio-moradia/" target="_blank" class="bolsa-card">
+        <div class="bolsa-badge blue">Moradia</div>
+        <div class="bolsa-name">Auxílio Moradia</div>
+        <div class="bolsa-desc">Benefício financeiro para aluguel e despesas básicas. Pode ser acumulado com bolsas como PET e Iniciação Acadêmica.</div>
+      </a>
+      <a href="https://prae.ufc.br/pt/residencia-universitaria/" target="_blank" class="bolsa-card">
+        <div class="bolsa-badge green">Moradia</div>
+        <div class="bolsa-name">Residência Universitária</div>
+        <div class="bolsa-desc">Vagas em moradias da própria UFC na capital para estudantes vindos do interior ou de outros estados sem condições financeiras.</div>
+      </a>
+      <a href="https://pibic.ufc.br/" target="_blank" class="bolsa-card">
+        <div class="bolsa-badge blue">Pesquisa</div>
+        <div class="bolsa-name">PIBIC / PIBITI</div>
+        <div class="bolsa-desc">Bolsas de Iniciação Científica e Tecnológica voltadas à pesquisa acadêmica. Vinculadas a projetos de professores orientadores.</div>
+      </a>
+      <a href="https://prae.ufc.br/pt/auxilios-e-bolsas-estudantis/bolsa-de-iniciacao-academica/" target="_blank" class="bolsa-card">
+        <div class="bolsa-badge gold">Acadêmico</div>
+        <div class="bolsa-name">BIA — Bolsa de Iniciação</div>
+        <div class="bolsa-desc">Para ingressantes em vulnerabilidade socioeconômica que desejam atuar em laboratórios, bibliotecas e setores da UFC.</div>
+      </a>
+      <a href="https://prograd.ufc.br/pt/programas-e-acoes/pet-ufc-programa-de-educacao-tutorial-universidade-federal-do-ceara/" target="_blank" class="bolsa-card">
+        <div class="bolsa-badge green">PET</div>
+        <div class="bolsa-name">PET e PAIP</div>
+        <div class="bolsa-desc">Programas de Educação Tutorial e Incentivo à Permanência. Voltados ao aprofundamento acadêmico e formação complementar.</div>
+      </a>
+      <a href="https://prae.ufc.br/pt/auxilios-e-bolsas-estudantis/auxilio-emergencial/" target="_blank" class="bolsa-card">
+        <div class="bolsa-badge blue">Emergencial</div>
+        <div class="bolsa-name">Auxílio Emergencial</div>
+        <div class="bolsa-desc">Para estudantes em vulnerabilidade que ingressam por lista de espera do SISU após os processos seletivos regulares da PRAE.</div>
+      </a>
+      <div class="bolsa-card">
+        <div class="bolsa-badge gold">Desporto</div>
+        <div class="bolsa-name">BID — Incentivo ao Desporto</div>
+        <div class="bolsa-desc">Destinada a atletas que representam a UFC em competições. Incentiva o rendimento desportivo aliado ao desempenho acadêmico.</div>
+      </div>
+      <a href="https://prex.ufc.br/pt/category/bolsas-de-extensao/" target="_blank" class="bolsa-card">
+        <div class="bolsa-badge blue">Extensão</div>
+        <div class="bolsa-name">Bolsa de Extensão</div>
+        <div class="bolsa-desc">Bolsas para projetos que conectam a universidade com a sociedade, envolvendo ações comunitárias e culturais.</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SAÚDE MENTAL -->
+<section class="saude-section" id="saude">
+  <div class="container">
+    <div class="saude-banner">
+      <div style="font-size:2.5rem;margin-bottom:16px;">💚</div>
+      <h2 class="saude-banner-title">Você não precisa passar pela universidade sozinho.</h2>
+      <p class="saude-banner-sub">A UFC oferece uma rede de apoio psicológico, pedagógico e social para cuidar do seu bem-estar durante a graduação. Buscar ajuda é um ato de coragem.</p>
+    </div>
+    <div class="section-label">💚 Saúde & Bem-Estar</div>
+    <h2 class="section-title" style="margin:14px 0 40px;">Rede de apoio disponível</h2>
+    <div class="saude-grid">
+      <div class="saude-card">
+        <div class="saude-card-icon">🧠</div>
+        <div class="saude-card-name">NASPE — Acolhimento Psicossocial</div>
+        <div class="saude-card-desc">Atendimento psicológico individual e em grupo. Agendamento pelo SIGAA → Menu do Discente → Agendamentos.</div>
+        <div class="saude-card-contact">📧 dae.came@ufc.br · prae.ufc.br</div>
+      </div>
+      <div class="saude-card">
+        <div class="saude-card-icon">📚</div>
+        <div class="saude-card-name">SOP — Apoio Pedagógico</div>
+        <div class="saude-card-desc">Atendimento psicopedagógico com foco no rendimento acadêmico. Para dificuldades de aprendizagem e organização dos estudos.</div>
+        <div class="saude-card-contact">📧 dae.came@ufc.br · (85) 3366-7440</div>
+      </div>
+      <div class="saude-card">
+        <div class="saude-card-icon">🏥</div>
+        <div class="saude-card-name">CEMUFC — Centro de Especialidades</div>
+        <div class="saude-card-desc">Psiquiatria e especialidades médicas. Vagas liberadas sextas às 11h pelo SIGAA. Campus Benfica.</div>
+        <div class="saude-card-contact">📞 (85) 3366-9279 · @cemufc2635</div>
+      </div>
+      <div class="saude-card">
+        <div class="saude-card-icon">🌿</div>
+        <div class="saude-card-name">LAPFES — Plantão Psicológico</div>
+        <div class="saude-card-desc">Terças-feiras. Manhã 8h–12h (senhas 7h30) e Tarde 13h–17h (senhas 12h30). Clínica-Escola de Psicologia, Benfica.</div>
+        <div class="saude-card-contact">📸 @lapfes · lapfesufc@gmail.com</div>
+      </div>
+      <div class="saude-card">
+        <div class="saude-card-icon">💬</div>
+        <div class="saude-card-name">Escuta Ativa</div>
+        <div class="saude-card-desc">Encontros em grupo para ansiedade, estresse e adaptação universitária. Quartas 14h–16h, mediados por alunos de Psicologia.</div>
+        <div class="saude-card-contact">📸 @escutaativaufc · escutaativa@ufc.br</div>
+      </div>
+      <div class="saude-card">
+        <div class="saude-card-icon">🌈</div>
+        <div class="saude-card-name">(SOBRE)VIVER</div>
+        <div class="saude-card-desc">Acolhimento psicológico grupal para o público LGBTQIAPN+ da UFC. Quintas 18h–19h30, Clínica-Escola de Psicologia.</div>
+        <div class="saude-card-contact">📸 @psicologiapet</div>
+      </div>
+      <div class="saude-card">
+        <div class="saude-card-icon">⚓</div>
+        <div class="saude-card-name">S.A.V.E. — AIChE UFC</div>
+        <div class="saude-card-desc">Saúde Mental, Autoconhecimento, Valorização da Vida e Empoderamento. Palestras e rodas de conversa no Campus do Pici.</div>
+        <div class="saude-card-contact">📸 @aiche.ufc · aiche.ufc@gmail.com</div>
+      </div>
+      <div class="saude-card">
+        <div class="saude-card-icon">♿</div>
+        <div class="saude-card-name">UFC Inclui — Acessibilidade</div>
+        <div class="saude-card-desc">Apoio pedagógico, tecnologia assistiva, Libras e PAED para estudantes com deficiência.</div>
+        <div class="saude-card-contact">📧 ufcinclui@acessibilidade.ufc.br</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section class="services-section" id="servicos">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">🍽️ Serviços ao Estudante</div>
+      <h2 class="section-title">Campus à sua disposição</h2>
+      <p class="section-subtitle">Conheça os principais serviços disponíveis para estudantes no Campus do Pici.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-card-head">
+          <div class="service-icon">🍽️</div>
+          <div>
+            <div class="service-name">Restaurante Universitário (RU)</div>
+            <div style="font-size:.75rem;color:var(--text-soft); margin-top:2px;">Pici I e Pici II</div>
+          </div>
+        </div>
+        <div class="service-card-content">
+          <p>Refeições balanceadas a <strong>R$ 1,10</strong> para estudantes via recarga no cartão RU. Almoço e jantar nos dias letivos.</p>
+          <p><strong>Como tirar o cartão:</strong> Vá ao guichê do RU com documento oficial + atestado de matrícula. Primeira emissão gratuita.</p>
+          <div class="service-links">
+            <a href="https://ru.ufc.br/recarga-online/" target="_blank" class="service-link">↗ Recarga online</a>
+            <a href="https://prae.ufc.br/pt/chamada-publica-no-03-2026-cadastro-socioeconomico-e-isencao-do-ru/" target="_blank" class="service-link">↗ Saiba mais sobre isenção</a>
+          </div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-head">
+          <div class="service-icon">🚌</div>
+          <div>
+            <div class="service-name">Intercampi & Linha 020</div>
+            <div style="font-size:.75rem;color:var(--text-soft); margin-top:2px;">Transporte gratuito</div>
+          </div>
+        </div>
+        <div class="service-card-content">
+          <p><strong>Intercampi:</strong> ônibus gratuito da UFC durante o período letivo. Rotas Pici ↔ Benfica ↔ Porangabuçu e Pici ↔ Labomar.</p>
+          <p><strong>Linha 020:</strong> ônibus público municipal gratuito que circula pelo Campus do Pici. Funciona o ano inteiro, mesmo nas férias.</p>
+          <p>Ambos não exigem documento durante o embarque.</p>
+          <div class="service-links">
+            <a href="https://ufcinfra.ufc.br/pt/catalogo-de-servicos/transporte/itinerario-dos-onibus-da-ufc-medida-protecao/" target="_blank" class="service-link">↗ Ver itinerários</a>
+          </div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-head">
+          <div class="service-icon">🪪</div>
+          <div>
+            <div class="service-name">Carteirinha Estudantil</div>
+            <div style="font-size:.75rem;color:var(--text-soft); margin-top:2px;">Meia-entrada e benefícios</div>
+          </div>
+        </div>
+        <div class="service-card-content">
+          <p>Emitida pela Etufor. Documentos necessários: documento oficial com foto, CPF e comprovante de residência.</p>
+          <p>Dúvidas: Instagram do DCE UFC <strong>@dce_ufc</strong></p>
+          <div class="service-links">
+            <a href="https://idestudantil.fortaleza.ce.gov.br/" target="_blank" class="service-link">↗ Solicitar online</a>
+            <a href="http://etuforweb.fortaleza.ce.gov.br/" target="_blank" class="service-link">↗ Agendamento presencial</a>
+          </div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-head">
+          <div class="service-icon">📚</div>
+          <div>
+            <div class="service-name">Bibliotecas do Campus</div>
+            <div style="font-size:.75rem;color:var(--text-soft); margin-top:2px;">Estudo individual e em grupo</div>
+          </div>
+        </div>
+        <div class="service-card-content">
+          <p><strong>BCCP:</strong> Av. Mister Hull · @bccpufc</p>
+          <p><strong>Física:</strong> Bloco 922 · bibfis@ufc.br</p>
+          <p><strong>Matemática:</strong> Bloco 914 · @bcm_ufc</p>
+          <p><strong>Pós-Graduação Eng.:</strong> Bloco 713 · @bpgeufc</p>
+          <div class="service-links">
+            <a href="https://pergamum.ufc.br" target="_blank" class="service-link">↗ Acessar Pergamum</a>
+          </div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-head">
+          <div class="service-icon">🍕</div>
+          <div>
+            <div class="service-name">Cantinas do Campus</div>
+            <div style="font-size:.75rem;color:var(--text-soft); margin-top:2px;">Lanches e refeições</div>
+          </div>
+        </div>
+        <div class="service-card-content">
+          <p><strong>Química:</strong> Bloco 703</p>
+          <p><strong>Física:</strong> Bloco 922 (self-service)</p>
+          <p><strong>Geologia:</strong> Bloco 912</p>
+          <p><strong>Ventão / STI / Biologia:</strong> Bloco 901</p>
+          <p>Opções variadas espalhadas pelo campus durante o período letivo.</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-head">
+          <div class="service-icon">🎓</div>
+          <div>
+            <div class="service-name">Carteira Acadêmica UFCID</div>
+            <div style="font-size:.75rem;color:var(--text-soft); margin-top:2px;">Identificação estudantil</div>
+          </div>
+        </div>
+        <div class="service-card-content">
+          <p>A carteirinha de estudante da UFC serve como identificação oficial dentro do campus e para descontos em serviços parceiros.</p>
+          <p>Emitida junto à coordenação do curso ou pelo SIGAA conforme disponibilidade. Consulte o Centro Acadêmico do seu curso para mais informações.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FERRAMENTAS -->
+<section class="tools-section" id="ferramentas">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">🛠️ Ferramentas</div>
+      <h2 class="section-title">Seu arsenal acadêmico</h2>
+      <p class="section-subtitle">Ferramentas digitais que facilitam os estudos, a organização e os projetos de engenharia.</p>
+    </div>
+    <div class="tools-grid">
+      <a href="https://calendar.google.com" target="_blank" class="tool-card"><div class="tool-icon">📅</div><div class="tool-name">Google Agenda</div><div class="tool-type">Organização</div></a>
+      <a href="https://drive.google.com" target="_blank" class="tool-card"><div class="tool-icon">☁️</div><div class="tool-name">Google Drive</div><div class="tool-type">Armazenamento</div></a>
+      <a href="https://notion.so" target="_blank" class="tool-card"><div class="tool-icon">⬛</div><div class="tool-name">Notion</div><div class="tool-type">Anotações</div></a>
+      <a href="https://onenote.com" target="_blank" class="tool-card"><div class="tool-icon">📓</div><div class="tool-name">OneNote</div><div class="tool-type">Anotações</div></a>
+      <a href="https://www.python.org" target="_blank" class="tool-card"><div class="tool-icon">🐍</div><div class="tool-name">Python</div><div class="tool-type">Programação</div></a>
+      <a href="https://www.mathworks.com/products/matlab.html" target="_blank" class="tool-card"><div class="tool-icon">📐</div><div class="tool-name">MATLAB</div><div class="tool-type">Cálculo</div></a>
+      <a href="https://www.gnu.org/software/octave/" target="_blank" class="tool-card"><div class="tool-icon">🔢</div><div class="tool-name">Octave</div><div class="tool-type">Cálculo (free)</div></a>
+      <a href="https://sheets.google.com" target="_blank" class="tool-card"><div class="tool-icon">📊</div><div class="tool-name">Google Sheets</div><div class="tool-type">Planilhas</div></a>
+      <a href="https://apps.ankiweb.net" target="_blank" class="tool-card"><div class="tool-icon">🃏</div><div class="tool-name">Anki</div><div class="tool-type">Memorização</div></a>
+      <a href="https://quizlet.com" target="_blank" class="tool-card"><div class="tool-icon">🎴</div><div class="tool-name">Quizlet</div><div class="tool-type">Memorização</div></a>
+      <a href="https://www.symbolab.com" target="_blank" class="tool-card"><div class="tool-icon">∫</div><div class="tool-name">Symbolab</div><div class="tool-type">Matemática</div></a>
+      <a href="https://www.wolframalpha.com" target="_blank" class="tool-card"><div class="tool-icon">🧮</div><div class="tool-name">Wolfram Alpha</div><div class="tool-type">Matemática</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATOS -->
+<section class="contatos-section" id="contatos">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">📞 Contatos</div>
+      <h2 class="section-title">Quem você precisa conhecer</h2>
+      <p class="section-subtitle">Principais órgãos e contatos da UFC para estudantes das Engenharias.</p>
+    </div>
+    <div class="contatos-grid">
+      <div class="contato-card">
+        <div class="contato-card-head">
+          <div class="contato-icon">🎓</div>
+          <div><div class="contato-title">Pró-Reitoria de Graduação</div><div class="contato-subtitle">PROGRAD</div></div>
+        </div>
+        <div class="contato-items">
+          <div class="contato-item"><span class="contato-item-icon">👤</span><div class="contato-item-text">Prof. Davi Romero de Vasconcelos (Pró-Reitor)</div></div>
+          <div class="contato-item"><span class="contato-item-icon">📞</span><div class="contato-item-text">(85) 3366-9498</div></div>
+          <div class="contato-item"><span class="contato-item-icon">📧</span><div class="contato-item-text"><a href="mailto:gabinete@prograd.ufc.br">gabinete@prograd.ufc.br</a></div></div>
+          <div class="contato-item"><span class="contato-item-icon">🌐</span><div class="contato-item-text"><a href="https://www.prograd.ufc.br" target="_blank">prograd.ufc.br</a></div></div>
+        </div>
+      </div>
+      <div class="contato-card">
+        <div class="contato-card-head">
+          <div class="contato-icon">💰</div>
+          <div><div class="contato-title">Pró-Reitoria de Assist. Estudantil</div><div class="contato-subtitle">PRAE — Bolsas e Auxílios</div></div>
+        </div>
+        <div class="contato-items">
+          <div class="contato-item"><span class="contato-item-icon">👤</span><div class="contato-item-text">Prof. Bruno Anderson Matias da Rocha</div></div>
+          <div class="contato-item"><span class="contato-item-icon">📞</span><div class="contato-item-text">(85) 3366-7440</div></div>
+          <div class="contato-item"><span class="contato-item-icon">📧</span><div class="contato-item-text"><a href="mailto:prae.secretaria@ufc.br">prae.secretaria@ufc.br</a></div></div>
+          <div class="contato-item"><span class="contato-item-icon">📸</span><div class="contato-item-text"><a href="https://www.instagram.com/praeufc/?hl=en" target="_blank">@praeufc</a></div></div>
+        </div>
+      </div>
+      <div class="contato-card">
+        <div class="contato-card-head">
+          <div class="contato-icon">🏛️</div>
+          <div><div class="contato-title">Diretoria do CT</div><div class="contato-subtitle">Centro de Tecnologia</div></div>
+        </div>
+        <div class="contato-items">
+          <div class="contato-item"><span class="contato-item-icon">👤</span><div class="contato-item-text">Prof. Bruno Vieira Bertoncini (Diretor)</div></div>
+          <div class="contato-item"><span class="contato-item-icon">📍</span><div class="contato-item-text">Bloco 710, Campus do Pici</div></div>
+          <div class="contato-item"><span class="contato-item-icon">📞</span><div class="contato-item-text">(85) 3366-9600</div></div>
+          <div class="contato-item"><span class="contato-item-icon">🌐</span><div class="contato-item-text"><a href="https://www.ct.ufc.br" target="_blank">ct.ufc.br</a></div></div>
+        </div>
+      </div>
+      <div class="contato-card">
+        <div class="contato-card-head">
+          <div class="contato-icon"></div>
+          <div><div class="contato-title">Ouvidoria UFC</div><div class="contato-subtitle">Sugestões e reclamações</div></div>
+        </div>
+        <div class="contato-items">
+          <div class="contato-item"><span class="contato-item-icon">📞</span><div class="contato-item-text">(85) 3366-7339 / 3366-7344</div></div>
+          <div class="contato-item"><span class="contato-item-icon">📧</span><div class="contato-item-text"><a href="mailto:ouvidoria@ufc.br">ouvidoria@ufc.br</a></div></div>
+        </div>
+      </div>
+      <div class="contato-card">
+        <div class="contato-card-head">
+          <div class="contato-icon">🧠</div>
+          <div><div class="contato-title">NASPE / DAE</div><div class="contato-subtitle">Saúde mental e apoio</div></div>
+        </div>
+        <div class="contato-items">
+          <div class="contato-item"><span class="contato-item-icon">📞</span><div class="contato-item-text">(85) 3366-7447</div></div>
+          <div class="contato-item"><span class="contato-item-icon">📧</span><div class="contato-item-text"><a href="mailto:dae.came@ufc.br">dae.came@ufc.br</a></div></div>
+          <div class="contato-item"><span class="contato-item-icon">🌐</span><div class="contato-item-text"><a href="https://prae.ufc.br/pt/dae" target="_blank">prae.ufc.br/pt/dae</a></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAPA DO CAMPUS -->
+<section class="map-section" id="mapa">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">📍 Localização</div>
+      <h2 class="section-title">Mapa do Campus do Pici</h2>
+      <p class="section-subtitle">Navegue pelo mapa interativo ou <a href="https://cca.ufc.br/wp-content/uploads/2025/05/mapa-pici-julho-2017.pdf" target="_blank" style="color:var(--blue);font-weight:600;">veja o mapa oficial em PDF</a> para encontrar blocos, laboratórios e outros pontos de interesse.</p>
+    </div>
+    <div class="map-container">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15924.81301258675!2d-38.57969870949335!3d-3.743932991533916!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7c74cdef310d883%3A0x15f7286393551f89!2sUniversidade%20Federal%20do%20Cear%C3%A1%20-%20Campus%20do%20Pici!5e0!3m2!1spt-BR!2sbr!4v1672604819845!5m2!1spt-BR!2sbr" 
+        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Portal<span>Eng</span> UFC</div>
+        <p class="footer-about">Um hub de informações para estudantes das Engenharias da Universidade Federal do Ceará. Desenvolvido de forma independente para facilitar a vida acadêmica.</p>
+      </div>
+      <div>
+        <h4>Cursos</h4>
+        <div class="footer-links">
+          <a href="#">Eng. Civil</a>
+          <a href="#">Eng. Elétrica</a>
+          <a href="#">Eng. Mecânica</a>
+          <a href="#">Eng. Química</a>
+          <a href="#">Eng. Computação</a>
+          <a href="#">Ver todos →</a>
+        </div>
+      </div>
+      <div>
+        <h4>Recursos</h4>
+        <div class="footer-links">
+          <a href="#vida-academica">Vida Acadêmica</a>
+          <a href="#bolsas">Bolsas e Auxílios</a>
+          <a href="#saude">Saúde Mental</a>
+          <a href="#servicos">Serviços</a>
+          <a href="#ferramentas">Ferramentas</a>
+        </div>
+      </div>
+      <div>
+        <h4>Links Úteis</h4>
+        <div class="footer-links">
+          <a href="https://si3.ufc.br" target="_blank">SIGAA</a>
+          <a href="https://webmail.ufc.br" target="_blank">E-mail UFC</a>
+          <a href="https://pergamum.ufc.br" target="_blank">Pergamum</a>
+          <a href="https://www.ufc.br" target="_blank">Site oficial UFC</a>
+          <a href="https://www.prae.ufc.br" target="_blank">PRAE</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-disclaimer">⚠️ Portal independente criado para a disciplina de Tecnologia e Sociedade, com o objetivo de ajudar estudantes das Engenharias da UFC. Este projeto não possui vínculo institucional com a universidade e não substitui seus canais de comunicação. Para informações oficiais, consulte sempre os sites da UFC.</p>
+      <p class="footer-copy">© 2026 Portal das Engenharias UFC<br>Projeto independente</p>
+    </div>
+  </div>
+</footer>
+
+<!-- COURSE MODAL -->
+<div class="modal-overlay" id="course-modal" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal-content">
+    <div class="modal-header">
+      <div></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+</body>
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const courses = [
+  { id:'civil', icon:'🏗️', name:'Engenharia Civil', dept:'Departamento de Engenharia Estrutural e Construção Civil', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Projeta e gerencia obras, estradas, pontes e estruturas. Atua em construção civil, saneamento, geotecnia e planejamento urbano.', orgs:[ {name:'CA de Engenharia Civil', type:'Centro Acadêmico', icon:'🏛️'}, {name:'PET Civil', type:'Programa PET', icon:'📚'} ] },
+  { id:'eletrica', icon:'⚡', name:'Engenharia Elétrica', dept:'Departamento de Engenharia Elétrica', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Projeta sistemas de energia, eletrônica, automação e telecomunicações. Trabalha com geração, transmissão e distribuição de energia.', orgs:[ {name:'CA de Engenharia Elétrica', type:'Centro Acadêmico', icon:'🏛️'} ] },
+  { id:'mecanica', icon:'⚙️', name:'Engenharia Mecânica', dept:'Departamento de Engenharia Mecânica e de Produção', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Projeta máquinas, sistemas térmicos, fluidos e automação industrial. Área vasta com atuação em indústria, automotivo e energia.', orgs:[ {name:'CA de Engenharia Mecânica', type:'Centro Acadêmico', icon:'🏛️'} ] },
+  { id:'producao', icon:'🏭', name:'Engenharia de Produção', dept:'Departamento de Engenharia Mecânica e de Produção', duration:'10 semestres', turno:'Integral', color:'gold', tags:['Integral','10 sem'], desc:'Otimiza sistemas produtivos, processos e recursos organizacionais. Atua em logística, gestão da qualidade e planejamento estratégico.', orgs:[ {name:'CA de Produção', type:'Centro Acadêmico', icon:'🏛️'} ] },
+  { id:'quimica', icon:'🧪', name:'Engenharia Química', dept:'Departamento de Engenharia Química (DEQ)', duration:'10 semestres', turno:'Integral', color:'green', tags:['Integral','10 sem'], desc:'Transforma matérias-primas em produtos através de processos físicos e químicos. Atua em indústria química, petroquímica, alimentos e meio ambiente.', orgs:[ {name:'AIChE UFC', type:'Capítulo estudantil AIChE', icon:'⚓'}, {name:'PET-EQ UFC', type:'Programa PET', icon:'📚'}, {name:'CA EQ (CAEQ)', type:'Centro Acadêmico', icon:'🏛️'}, {name:'Ciclo Jr.', type:'Empresa Júnior', icon:'💼'}, {name:'EPEQ-UFC', type:'Projeto de Extensão', icon:'🔬'} ] },
+  { id:'ambiental', icon:'🌿', name:'Engenharia Ambiental', dept:'Departamento de Engenharia Hidráulica e Ambiental', duration:'10 semestres', turno:'Integral', color:'green', tags:['Integral','10 sem'], desc:'Atua em saneamento, qualidade da água, gestão de resíduos e sustentabilidade. Importante papel no planejamento ambiental e recuperação de áreas degradadas.', orgs:[ {name:'Ciclo Jr.', type:'Empresa Júnior (com EQ)', icon:'💼'} ] },
+  { id:'teleinfo', icon:'📡', name:'Engenharia de Teleinformática', dept:'Departamento de Engenharia de Teleinformática (DETI)', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Integra telecomunicações, redes, sistemas embarcados e tecnologia da informação. Forte atuação em telecomunicações, Internet das Coisas e infraestrutura digital.', orgs:[ {name:'CA de Teleinformática', type:'Centro Acadêmico', icon:'🏛️'} ] },
+  { id:'computacao', icon:'💻', name:'Engenharia de Computação', dept:'Departamento de Computação', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Une hardware e software: sistemas embarcados, inteligência artificial, redes e arquitetura de computadores. Alta demanda no mercado de tecnologia.', orgs:[ {name:'CA de Computação', type:'Centro Acadêmico', icon:'🏛️'} ] },
+  { id:'metalurgica', icon:'⛏️', name:'Engenharia Metalúrgica', dept:'Departamento de Engenharia Metalúrgica e de Materiais', duration:'10 semestres', turno:'Integral', color:'gold', tags:['Integral','10 sem'], desc:'Estuda propriedades e processamento de metais e materiais. Atua em mineração, indústria siderúrgica, aeronáutica e desenvolvimento de novos materiais.', orgs:[ {name:'CA de Metalúrgica', type:'Centro Acadêmico', icon:'🏛️'} ] },
+  { id:'energias', icon:'☀️', name:'Engenharia de Energias Renováveis', dept:'Departamento de Energia', duration:'10 semestres', turno:'Integral', color:'green', tags:['Integral','10 sem'], desc:'Projeta e gerencia sistemas de energia solar, eólica, biomassa e outras fontes sustentáveis. Ceará é referência nacional em energia renovável.', orgs:[ {name:'CA de Energias Renováveis', type:'Centro Acadêmico', icon:'🏛️'} ] },
+  { id:'alimentos', icon:'🌾', name:'Engenharia de Alimentos', dept:'Departamento de Tecnologia de Alimentos', duration:'10 semestres', turno:'Integral', color:'gold', tags:['Integral','10 sem'], desc:'Desenvolve e controla processos de produção, conservação e distribuição de alimentos. Atua em indústrias alimentícias, controle de qualidade e pesquisa.', orgs:[ {name:'CA de Alimentos', type:'Centro Acadêmico', icon:'🏛️'} ] },
+  { id:'pesca', icon:'🐟', name:'Engenharia de Pesca', dept:'Departamento de Engenharia de Pesca', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Estuda sistemas de captura, criação e processamento de pescados. Atua em aquicultura, gestão de recursos pesqueiros e maricultura.', orgs:[ {name:'CA de Pesca', type:'Centro Acadêmico', icon:'🏛️'} ] },
+];
+
+// ─── RENDER COURSES ────────────────────────────────────────────────────────────
+function renderCourses() {
+  const grid = document.getElementById('courses-grid');
+  grid.innerHTML = courses.map(c => `
+    <div class="course-card" onclick="openCourseModal('${c.id}')">
+      <div class="course-icon">${c.icon}</div>
+      <div class="course-name">${c.name}</div>
+      <div class="course-meta">
+        ${c.tags.map((t,i) => `<span class="course-tag ${i===1?c.color:''}">${t}</span>`).join('')}
+      </div>
+      <div class="course-desc">${c.desc}</div>
+      <div class="course-arrow">↗</div>
+    </div>
+  `).join('');
+}
+
+// ─── COURSE MODAL ──────────────────────────────────────────────────────────────
+function openCourseModal(id) {
+  const c = courses.find(x => x.id === id);
+  if (!c) return;
+  const body = document.getElementById('modal-body');
+  body.innerHTML = `
+    <div class="modal-course-icon">${c.icon}</div>
+    <div class="modal-course-name">${c.name}</div>
+    <div class="modal-course-tags">
+      <span class="course-tag">${c.turno}</span>
+      <span class="course-tag">${c.duration}</span>
+      <span class="course-tag">${c.dept}</span>
+    </div>
+    <p style="font-size:.9rem;color:var(--text-soft);line-height:1.7;margin-bottom:28px;">${c.desc}</p>
+    <div class="modal-section-title">📋 Informações do Curso</div>
+    <div class="modal-grid">
+      <div class="modal-info-card"><div class="modal-info-label">Duração</div><div class="modal-info-val">${c.duration}</div></div>
+      <div class="modal-info-card"><div class="modal-info-label">Turno</div><div class="modal-info-val">${c.turno}</div></div>
+      <div class="modal-info-card"><div class="modal-info-label">Departamento</div><div class="modal-info-val">${c.dept}</div></div>
+      <div class="modal-info-card"><div class="modal-info-label">Campus</div><div class="modal-info-val">Pici · Fortaleza · CE</div></div>
+    </div>
+    <div class="modal-section-title">👥 Organizações Estudantis</div>
+    <div class="modal-orgs">
+      ${c.orgs.map(o => `
+        <div class="modal-org">
+          <div class="modal-org-icon">${o.icon}</div>
+          <div><div class="modal-org-name">${o.name}</div><div class="modal-org-type">${o.type}</div></div>
+          <div class="modal-org-link">Ver →</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="modal-section-title">📚 Grade Curricular e Laboratórios</div>
+    <div class="modal-placeholder">
+      📋 As informações detalhadas sobre grade curricular, laboratórios, fluxograma e coordenação serão preenchidas pela equipe do curso.<br>
+      <strong style="margin-top:8px;display:block;">Conteúdo dinâmico — aguardando preenchimento via formulário.</strong>
+    </div>
+  `;
+  document.getElementById('course-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('course-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('course-modal')) closeModal();
+}
+
+// ─── MEU CURSO ─────────────────────────────────────────────────────────────────
+function renderMeuCurso() {
+  const selector = document.getElementById('curso-selector');
+  selector.innerHTML = courses.map(c => `
+    <div class="curso-chip ${localStorage.getItem('meu_curso') === c.id ? 'active' : ''}" onclick="selectCurso('${c.id}')" data-id="${c.id}">
+      ${c.icon} ${c.name.replace('Engenharia de ','').replace('Engenharia ','Eng. ')}
+    </div>
+  `).join('');
+
+  const saved = localStorage.getItem('meu_curso');
+  if (saved) showMyCourse(saved);
+}
+
+function selectCurso(id) {
+  localStorage.setItem('meu_curso', id);
+  document.querySelectorAll('.curso-chip').forEach(el => el.classList.remove('active'));
+  document.querySelector(`[data-id="${id}"]`)?.classList.add('active');
+  showMyCourse(id);
+}
+
+function showMyCourse(id) {
+  const c = courses.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('my-course-placeholder').style.display = 'none';
+  const display = document.getElementById('my-course-display');
+  display.innerHTML = `
+    <div class="my-course-card active">
+      <div class="my-course-header">
+        <div class="my-course-icon">${c.icon}</div>
+        <div>
+          <div class="my-course-name">${c.name}</div>
+          <div class="my-course-dept">${c.dept}</div>
+        </div>
+      </div>
+      <div class="my-course-grid">
+        <div class="my-course-item"><div class="my-course-item-title">Duração</div><div class="my-course-item-val">${c.duration}</div></div>
+        <div class="my-course-item"><div class="my-course-item-title">Turno</div><div class="my-course-item-val">${c.turno}</div></div>
+        <div class="my-course-item"><div class="my-course-item-title">Organizações</div><div class="my-course-item-val">${c.orgs.length} ativas</div></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button onclick="openCourseModal('${c.id}')" style="padding:10px 20px;background:var(--gold);color:#00264D;border-radius:8px;font-weight:700;font-size:.85rem;cursor:pointer;border:none;font-family:inherit;">Ver página completa →</button>
+        <button onclick="gotoSection('bolsas')" style="padding:10px 20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border-radius:8px;font-weight:600;font-size:.85rem;cursor:pointer;border:1px solid rgba(255,255,255,.15);font-family:inherit;">Bolsas disponíveis</button>
+      </div>
+    </div>
+  `;
+}
+
+// ─── UI HELPERS ────────────────────────────────────────────────────────────────
+function toggleSearch() {
+  const el = document.getElementById('search-overlay');
+  el.classList.toggle('open');
+  if (el.classList.contains('open')) document.getElementById('search-input').focus();
+}
+
+function closeSearch(e) {
+  if (e.target === document.getElementById('search-overlay')) toggleSearch();
+}
+
+function gotoSection(id) {
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
+  document.getElementById('search-overlay').classList.remove('open');
+}
+
+function toggleDark() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  document.getElementById('dark-icon').innerHTML = isDark
+    ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+function setActive(el) {
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function toggleMobile() {
+  const menu = document.getElementById('mobile-menu');
+  const hb = document.getElementById('hamburger');
+  menu.classList.toggle('open');
+  hb.classList.toggle('open');
+}
+
+function closeMobile() {
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+function showModal(type) {
+  const body = document.getElementById('modal-body');
+  const info = {
+    'sigaa-ira': { title: 'IRA — Índice de Rendimento Acadêmico', content: `<p style="font-size:.9rem;color:var(--text-soft);line-height:1.7;">O IRA é o indicador do seu desempenho acadêmico. O IRA individual reflete seu histórico pessoal, enquanto o IRA Geral considera todos os alunos do curso.<br><br><strong>⚠️ Importante:</strong> Reprovações por falta (nota zero no cálculo) impactam o IRA muito mais negativamente do que trancamento de disciplina ou reprovação por nota.<br><br><strong>Como consultar:</strong> SIGAA → Menu do Discente → Ensino → Consultas do Discente → Histórico de IRA</p>` },
+    'sigaa-freq': { title: 'Frequência nas Disciplinas', content: `<p style="font-size:.9rem;color:var(--text-soft);line-height:1.7;">A frequência mínima exigida é de <strong>75%</strong> em cada disciplina. Faltas acima desse limite resultam em reprovação automática independentemente das notas.<br><br><strong>Como consultar suas faltas:</strong><br>SIGAA → acesse o componente curricular → Menu Turma Virtual → Alunos → Frequência</p>` },
+    'sigaa-docs': { title: 'Documentos e Declarações', content: `<p style="font-size:.9rem;color:var(--text-soft);line-height:1.7;">Os seguintes documentos podem ser emitidos diretamente pelo SIGAA sem custo:<br><br>• <strong>Atestado de Matrícula</strong><br>• <strong>Histórico Escolar</strong><br>• <strong>Declaração de Vínculo</strong><br><br><strong>Como acessar:</strong> SIGAA → Menu Superior → Ensino → Documentos e Declarações</p>` },
+    'sigaa-mat': { title: 'Matrícula Online', content: `<p style="font-size:.9rem;color:var(--text-soft);line-height:1.7;">A matrícula em disciplinas para o próximo semestre é feita pelo SIGAA nos períodos definidos pelo calendário acadêmico.<br><br><strong>Como acessar:</strong> SIGAA → Menu do Discente → Ensino → Matrícula On-Line<br><br><strong>Pré-requisitos:</strong> Para cursar certas disciplinas, outras precisam ser concluídas antes. Consulte o progresso do curso em: Ensino → Consulta do Discente → Progresso no Curso</p>` },
+  };
+  const item = info[type];
+  if (!item) return;
+  body.innerHTML = `<h2 style="font-family:'Poppins',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:20px;">${item.title}</h2>${item.content}`;
+  document.getElementById('course-modal').classList.add('open');
+}
+
+function showBolsaModal(id) {
+  // just scroll
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderCourses();
+  renderMeuCurso();
+
+  // Restore dark mode
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('dark-icon').innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  }
+
+  // Keyboard: Esc closes modals
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); document.getElementById('search-overlay').classList.remove('open'); }
+  });
+
+  // Active nav on scroll
+  const sections = ['home','cursos','vida-academica','bolsas','saude','servicos','ferramentas','contatos'];
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.nav-link[href="#${id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+
+  // Fade-in on scroll
+  const fadeEls = document.querySelectorAll('.course-card,.bolsa-card,.saude-card,.service-card,.academic-card,.tool-card,.contato-card');
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
+    });
+  }, { threshold: 0.1 });
+  fadeEls.forEach(el => {
+    el.style.opacity = '0'; el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity .4s ease, transform .4s ease';
+    fadeObs.observe(el);
+  });
+});
+</script>
+</html>
+HTMLEOF
+echo "Done"
+Saída
+
+Done
