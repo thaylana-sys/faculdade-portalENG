@@ -509,6 +509,19 @@ section { padding:80px 0; }
   background:var(--blue-light); border-radius:12px; padding:20px; text-align:center;
   border:2px dashed rgba(0,62,126,.2); color:var(--blue); font-size:.85rem;
 }
+.modal-labs { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:16px; margin-bottom:28px; }
+.modal-lab-card { background:var(--gray-bg); border-radius:10px; border:1px solid var(--gray-200); overflow:hidden; }
+.modal-lab-card img { width:100%; height:140px; object-fit:cover; }
+.modal-lab-content { padding:12px; }
+.modal-lab-name { font-weight:700; font-size:.85rem; color:var(--text); margin-bottom:6px; }
+.modal-lab-desc { font-size:.8rem; color:var(--text-soft); line-height:1.5; }
+.modal-list { list-style:disc; padding-left:20px; font-size:.9rem; color:var(--text-soft); line-height:1.7; margin-bottom:28px; }
+.modal-list li { margin-bottom:6px; }
+.modal-video-link {
+  display:flex; align-items:center; gap:14px; padding:16px; background:var(--gray-bg); border-radius:10px; border:1px solid var(--gray-200);
+  font-weight:700; font-size:.9rem; color:var(--text); text-decoration:none; transition:all var(--transition);
+}
+.modal-video-link:hover { background:var(--gray-200); border-color:var(--gray-400); }
 
 /* ─── FOOTER ─────────────────────────────────────────────────────── */
 footer {
@@ -1207,18 +1220,54 @@ footer {
 <script>
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 const courses = [
-  { id:'civil', icon:'🏗️', name:'Engenharia Civil', dept:'Departamento de Engenharia Estrutural e Construção Civil', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Capacita profissionais para planejar, projetar, gerenciar e executar obras estruturais e de infraestrutura, como edifícios, pontes, rodovias, e projetos de saneamento.', orgs:[ {name:'PET Civil', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petcivil?igsh=ZDB2NnF5cDJoaGUy', site:'https://petcivil.ufc.br/pt/', linkedin:'https://br.linkedin.com/company/petcivilufc'}}, {name:'Consultec Jr', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/consultecir?utm_source=ig_web_button_share_sheet&igsh=ZDNIZDc0MzIxNw==', site:'http://www.consultecir.com/', linkedin:'https://br.linkedin.com/company/consultec-jr'}}, {name:'CAEC', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/caec.ufc?utm_source=ig_web_button_share_sheet&igsh=ZDNIZDc0MzIxNw=='}} ], links: { grade: 'https://site.crateus.ufc.br/wp-content/uploads/2024/02/Estrutura-curricular-2024.1.jpg', fluxo: 'https://site.crateus.ufc.br/wp-content/uploads/2024/02/Estrutura-curricular-2024.1.jpg', coord: 'https://www.ufc.br/ensino/guia-de-profissoes/555-engenharia-civil' } },
-  { id:'eletrica', icon:'⚡', name:'Engenharia Elétrica', dept:'Departamento de Engenharia Elétrica', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Forte base lógico-matemática e analítica para soluções exatas e seguras, com foco em Sistemas de Potência, Automação Industrial e energias renováveis.', orgs:[ {name:'PET Engenharia Elétrica', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/peteletricaufc/', linkedin:'https://www.linkedin.com/company/pet-eletrica-ufc/posts/?feedView=all'}}, {name:'TECSYS', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/tecsys.jr/', linkedin:'https://www.linkedin.com/company/tecsys-jr./'}}, {name:'CAEEL', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/caeel.ufc/'}} ], links: { grade: 'https://ccee.ufc.br/wp-content/uploads/2022/05/disciplinas-dee-v03.pdf', fluxo: 'https://ccee.ufc.br/wp-content/uploads/2022/05/disciplinas-dee-v03.pdf', coord: 'https://ccee.ufc.br/pt/' } },
-  { id:'mecanica', icon:'⚙️', name:'Engenharia Mecânica', dept:'Departamento de Engenharia Mecânica e de Produção', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Atua como um integrador de tecnologias, preparado para conceber desde protótipos biomédicos até gerenciar a manutenção de complexos industriais.', orgs:[ {name:'PET Engenharia Mecânica', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petmecufc/'}}, {name:'Diferencial Jr', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/diferencialjr/', site:'http://www.diferencialjr.ufc.br/'}} ], links: { grade: 'https://www.si3.ufc.br/sigaa/public/curso/curriculo.jsf;jsessionid=A29E5E522929E62A1958BEE694DDBCFB.node24', fluxo: 'https://www.si3.ufc.br/sigaa/public/curso/curriculo.jsf;jsessionid=A29E5E522929E62A1958BEE694DDBCFB.node24', coord: 'https://mecanica.ufc.br/' } },
-  { id:'producao', icon:'🏭', name:'Engenharia de Produção', dept:'Departamento de Engenharia Mecânica e de Produção', duration:'10 semestres', turno:'Vespertino', color:'gold', tags:['Vespertino','10 sem'], desc:'Atua na intersecção entre o conhecimento técnico e a gestão para otimização de sistemas produtivos, aliando tecnologia, logística e finanças.', orgs:[ {name:'PET Produção', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petproducaoufc/', site:'http://www.petprod.ufc.br/'}}, {name:'Proativa Jr.', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/proativajr/', site:'https://proativajr.com.br/'}}, {name:'CAEPRO', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/caepro.ufc/', linkedin:'https://br.linkedin.com/company/caeproufc'}} ], links: { grade: 'https://www.si3.ufc.br/sigaa/public/curso/curriculo.jsf;jsessionid=C45BA4B4661510CB3620D8FC42E5B4F6.node24', fluxo: 'https://www.si3.ufc.br/sigaa/public/curso/curriculo.jsf;jsessionid=C45BA4B4661510CB3620D8FC42E5B4F6.node24', coord: 'http://www.producao.ufc.br' } },
-  { id:'quimica', icon:'🧪', name:'Engenharia Química', dept:'Departamento de Engenharia Química (DEQ)', duration:'10 semestres', turno:'Integral', color:'green', tags:['Integral','10 sem'], desc:'Projeta, gerencia e otimiza processos industriais com transformações físicas e químicas, convertendo matérias-primas em produtos de alto valor agregado.', orgs:[ {name:'PET Engenharia Química', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/peteq.ufc', site:'https://peteq.ufc.br/', linkedin:'https://www.linkedin.com/company/pet-engenharia-qu%C3%ADmica-ufc'}}, {name:'Ciclo Jr.', type:'Empresa Júnior', icon:'💼', links:{site:'https://www.ciclojr.com/'}} ], links: { grade: 'https://www.engquimica.ufc.br', fluxo: 'https://www.engquimica.ufc.br', coord: 'https://www.engquimica.ufc.br' } },
-  { id:'ambiental', icon:'🌿', name:'Engenharia Ambiental e Sanitária', dept:'Departamento de Engenharia Hidráulica e Ambiental', duration:'10 semestres', turno:'Integral', color:'green', tags:['Integral','10 sem'], desc:'Focada no desenvolvimento sustentável, aplicando tecnologias para proteger o meio ambiente e recuperar recursos degradados como água, solo e ar.', orgs:[ {name:'PET Engenharia Ambiental', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petambientalufc_/', site:'https://petengambufc.wordpress.com/'}}, {name:'Ciclo Jr.', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/ciclojr/', site:'https://www.ciclojr.com/'}}, {name:'Centro Acadêmico', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/eng.ambientalufc/'}} ], links: { grade: 'https://engeambiental.ufc.br/pt/estrutura-curricular/estrutura-curricular-2023/', fluxo: 'https://engeambiental.ufc.br/pt/estrutura-curricular/estrutura-curricular-2023/', coord: 'https://engeambiental.ufc.br/pt/endereco-e-contato/' } },
-  { id:'teleinfo', icon:'📡', name:'Engenharia de Teleinformática', dept:'Departamento de Engenharia de Teleinformática (DETI)', duration:'10 semestres', turno:'Diurno e Noturno', color:'blue', tags:['Diurno','Noturno'], desc:'Integra Telecomunicações e Computação para projetar e gerenciar sistemas de hardware e software para transmissão, processamento e segurança de dados.', orgs:[ {name:'CA de Teleinformática', type:'Centro Acadêmico', icon:'🏛️'} ], links: { grade: 'https://deti.ufc.br/pt/', fluxo: 'https://deti.ufc.br/pt/', coord: 'https://deti.ufc.br/pt/' } },
+  {
+    id:'civil',
+    icon:'🏗️',
+    name:'Engenharia Civil',
+    dept:'Departamento de Engenharia Estrutural e Construção Civil',
+    duration:'10 semestres',
+    turno:'Integral',
+    color:'blue',
+    tags:['Integral','10 sem'],
+    desc:'O curso de Engenharia Civil capacita profissionais para planejar, projetar, gerenciar e executar obras estruturais e de infraestrutura. O engenheiro formado atua na construção de edifícios, pontes, rodovias, ferrovias, portos e aeroportos, além de desenvolver projetos de saneamento, sistemas de transporte e recursos hídricos, sempre aliando viabilidade técnica, econômica e sustentabilidade socioambiental.',
+    orgs:[
+      {name:'PET Civil', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petcivil', site:'https://petcivil.ufc.br/pt/', linkedin:'https://br.linkedin.com/company/petcivilufc'}},
+      {name:'Consultec Jr', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/consultecjr', site:'http://www.consultecir.com/', linkedin:'https://br.linkedin.com/company/consultec-jr'}},
+      {name:'CAEC', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/caec.ufc'}}
+    ],
+    links: {
+      grade: 'https://deecc.ufc.br/wp-content/uploads/2023/02/Estrutura-Curricular-2023.1.pdf',
+      fluxo: 'https://deecc.ufc.br/wp-content/uploads/2023/02/Fluxograma-2023.1.pdf',
+      coord: 'https://deecc.ufc.br/pt/',
+      email: 'civil@ufc.br'
+    },
+    video: 'https://youtu.be/yZlY7q2KPcw',
+    areas: ['Construção Civil e Edificações', 'Estruturas e Fundações', 'Infraestrutura e Transportes', 'Recursos Hídricos e Saneamento', 'Geotecnia', 'Consultoria, Avaliações e Perícias', 'Planejamento e Orçamentação', 'Empreendedorismo e Inovação', 'Pesquisa e Carreira Acadêmica'],
+    empresas: ['MRV Engenharia', 'Construtora Mota Machado', 'Grupo Marquise', 'Moura Dubeux', 'Andrade Gutierrez', 'Camargo Corrêa', 'OEC', 'Construtora Colmeia', 'Diagonal Engenharia', 'Terram Engenharia', 'Petrobras', 'Cagece', 'Sabesp', 'Vale', 'Gerdau'],
+    labs: [
+      {
+        name: 'Laboratório de Materiais de Construção Civil',
+        desc: 'Equipado com betoneira, estufas, balanças e prensas. Utilizado por alunos de Graduação, Pós-Graduação e Pesquisadores para ensaios e desenvolvimento de materiais.',
+        img: 'https://lh3.googleusercontent.com/d/1PAFsHDxvTzO0aHn3kRxZFL-brWkF-cVf'
+      },
+      {
+        name: 'Laboratório de Ensaios em Materiais',
+        desc: 'Oferece serviços de análise, caracterização e avaliação de propriedades em uma variedade de materiais, atendendo à comunidade acadêmica e à indústria.',
+        img: 'https://lh3.googleusercontent.com/d/10PmDFf52Ht_ALgIId-9KPulwh3eJKCsB'
+      }
+    ]
+  },
+  { id:'eletrica', icon:'⚡', name:'Engenharia Elétrica', dept:'Departamento de Engenharia Elétrica', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Forte base lógico-matemática e analítica para soluções exatas e seguras, com foco em Sistemas de Potência, Automação Industrial e energias renováveis.', orgs:[ {name:'PET Engenharia Elétrica', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/peteletricaufc/', linkedin:'https://www.linkedin.com/company/pet-eletrica-ufc/posts/?feedView=all'}}, {name:'TECSYS', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/tecsys.jr/', linkedin:'https://www.linkedin.com/company/tecsys-jr./'}}, {name:'CAEEL', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/caeel.ufc/'}} ], links: { grade: 'https://ccee.ufc.br/wp-content/uploads/2022/05/disciplinas-dee-v03.pdf', fluxo: 'https://ccee.ufc.br/wp-content/uploads/2022/05/fluxograma-2022.pdf', coord: 'https://ccee.ufc.br/pt/' } },
+  { id:'mecanica', icon:'⚙️', name:'Engenharia Mecânica', dept:'Departamento de Engenharia Mecânica e de Produção', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Atua como um integrador de tecnologias, preparado para conceber desde protótipos biomédicos até gerenciar a manutenção de complexos industriais.', orgs:[ {name:'PET Engenharia Mecânica', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petmecufc/'}}, {name:'Diferencial Jr', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/diferencialjr/', site:'http://www.diferencialjr.ufc.br/'}} ], links: { grade: 'https://mecanica.ufc.br/wp-content/uploads/2023/03/Estrutura-Curricular-Engenharia-Mecanica-2023.1.pdf', fluxo: 'https://mecanica.ufc.br/wp-content/uploads/2023/03/Fluxograma-Engenharia-Mecanica-2023.1.pdf', coord: 'https://mecanica.ufc.br/' } },
+  { id:'producao', icon:'🏭', name:'Engenharia de Produção', dept:'Departamento de Engenharia Mecânica e de Produção', duration:'10 semestres', turno:'Vespertino', color:'gold', tags:['Vespertino','10 sem'], desc:'Atua na intersecção entre o conhecimento técnico e a gestão para otimização de sistemas produtivos, aliando tecnologia, logística e finanças.', orgs:[ {name:'PET Produção', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petproducaoufc/', site:'http://www.petprod.ufc.br/'}}, {name:'Proativa Jr.', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/proativajr/', site:'https://proativajr.com.br/'}}, {name:'CAEPRO', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/caepro.ufc/', linkedin:'https://br.linkedin.com/company/caeproufc'}} ], links: { grade: 'http://www.producao.ufc.br/wp-content/uploads/2023/02/Estrutura-Curricular-2023.1.pdf', fluxo: 'http://www.producao.ufc.br/wp-content/uploads/2023/02/Fluxograma-2023.1.pdf', coord: 'http://www.producao.ufc.br' } },
+  { id:'quimica', icon:'🧪', name:'Engenharia Química', dept:'Departamento de Engenharia Química (DEQ)', duration:'10 semestres', turno:'Integral', color:'green', tags:['Integral','10 sem'], desc:'Projeta, gerencia e otimiza processos industriais com transformações físicas e químicas, convertendo matérias-primas em produtos de alto valor agregado.', orgs:[ {name:'PET Engenharia Química', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/peteq.ufc', site:'https://peteq.ufc.br/', linkedin:'https://www.linkedin.com/company/pet-engenharia-qu%C3%ADmica-ufc'}}, {name:'Ciclo Jr.', type:'Empresa Júnior', icon:'💼', links:{site:'https://www.ciclojr.com/'}}, {name:'CAEQ', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/caequfc/'}} ], links: { grade: 'https://www.engquimica.ufc.br/wp-content/uploads/2023/01/Estrutura-Curricular-2023.1.pdf', fluxo: 'https://www.engquimica.ufc.br/wp-content/uploads/2023/01/Fluxograma-2023.1.pdf', coord: 'https://www.engquimica.ufc.br' } },
+  { id:'ambiental', icon:'', name:'Engenharia Ambiental e Sanitária', dept:'Departamento de Engenharia Hidráulica e Ambiental', duration:'10 semestres', turno:'Integral', color:'green', tags:['Integral','10 sem'], desc:'Focada no desenvolvimento sustentável, aplicando tecnologias para proteger o meio ambiente e recuperar recursos degradados como água, solo e ar.', orgs:[ {name:'PET Engenharia Ambiental', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petambientalufc_/', site:'https://petengambufc.wordpress.com/'}}, {name:'Ciclo Jr.', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/ciclojr/', site:'https://www.ciclojr.com/'}}, {name:'Centro Acadêmico', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/eng.ambientalufc/'}} ], links: { grade: 'https://engeambiental.ufc.br/pt/estrutura-curricular/estrutura-curricular-2023/', fluxo: 'https://engeambiental.ufc.br/pt/estrutura-curricular/estrutura-curricular-2023/', coord: 'https://engeambiental.ufc.br/pt/endereco-e-contato/' } },
+  { id:'teleinfo', icon:'📡', name:'Engenharia de Teleinformática', dept:'Departamento de Engenharia de Teleinformática (DETI)', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Integra Telecomunicações e Computação para projetar e gerenciar sistemas de hardware e software para transmissão, processamento e segurança de dados.', orgs:[ {name:'CA de Teleinformática', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/catel.ufc/'}} ], links: { grade: 'https://deti.ufc.br/wp-content/uploads/2023/02/Estrutura-Curricular-2023.1.pdf', fluxo: 'https://deti.ufc.br/wp-content/uploads/2023/02/Fluxograma-2023.1.pdf', coord: 'https://deti.ufc.br/pt/' } },
   { id:'computacao', icon:'💻', name:'Engenharia de Computação', dept:'Depto. de Computação & DETI', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Perfil analítico, inovador e versátil que atua como elo entre hardware e software, integrando inteligência artificial, automação e conectividade.', orgs:[ {name:'PET Eng. de Computação', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petengcompufc/', site:'https://petengcomp.ufc.br/'}}, {name:'CEOS JR', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/ceosjr/', site:'https://ceosjr.com/'}} ], links: { grade: 'https://engcomp.ufc.br/wp-content/uploads/2024/03/estrutura-curricular-2024.1.pdf', fluxo: 'https://engcomp.ufc.br/pt/estrutura-curricular-2024-1/', coord: 'https://engcomp.ufc.br/pt/' } },
-  { id:'metalurgica', icon:'⛏️', name:'Engenharia Metalúrgica', dept:'Departamento de Engenharia Metalúrgica e de Materiais', duration:'10 semestres', turno:'Integral', color:'gold', tags:['Integral','10 sem'], desc:'Domínio de toda a cadeia produtiva dos metais (siderurgia, aquisição, operação, integridade de equipamentos) aliando gestão e sustentabilidade.', orgs:[ {name:'PET Eng. Metalúrgica', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petmetalufc/'}}, {name:'Metal Soluções', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/metalsolucoesjr/'}} ], links: { grade: 'https://www.si3.ufc.br/sigaa/public/curso/curriculo.jsf;jsessionid=23FD231CAAE52E353B0608B8EC2B53A7.node23', fluxo: 'https://www.si3.ufc.br/sigaa/public/curso/curriculo.jsf;jsessionid=23FD231CAAE52E353B0608B8EC2B53A7.node23', coord: 'https://prograd.ufc.br/pt/cursos-de-graduacao/engenharia-metalurgica-fortaleza/' } },
-  { id:'energias', icon:'☀️', name:'Engenharia de Energias Renováveis', dept:'Departamento de Energia', duration:'10 semestres', turno:'Integral', color:'green', tags:['Integral','10 sem'], desc:'Projeta e gerencia sistemas de energia solar, eólica, biomassa e outras fontes sustentáveis, com forte conexão com o hub de Hidrogênio Verde do Ceará.', orgs:[ {name:'PET Energias', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petenergias/', site:'https://sites.google.com/view/petenergiasufc/home', linkedin:'https://www.linkedin.com/company/pet-energias-ufc/'}}, {name:'CAEER', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/caeer.ufc/'}} ], links: { grade: 'https://www.si3.ufc.br/sigaa/public/curso/curriculo.jsf;jsessionid=D9E0E2955271B56317114BBCA859852A.node24', fluxo: 'https://www.si3.ufc.br/sigaa/public/curso/curriculo.jsf;jsessionid=D9E0E2955271B56317114BBCA859852A.node24', coord: 'https://prograd.ufc.br/pt/cursos-de-graduacao/engenharia-de-energias-renovaveis-fortaleza/' } },
-  { id:'alimentos', icon:'🌾', name:'Engenharia de Alimentos', dept:'Departamento de Tecnologia de Alimentos', duration:'10 semestres', turno:'Integral', color:'gold', tags:['Integral','10 sem'], desc:'Desenvolve e controla processos de produção, conservação e distribuição de alimentos. Atua em indústrias alimentícias, controle de qualidade e pesquisa.', orgs:[ {name:'CA de Alimentos', type:'Centro Acadêmico', icon:'🏛️'} ], links: { grade: '#', fluxo: '#', coord: '#' } },
-  { id:'pesca', icon:'🐟', name:'Engenharia de Pesca', dept:'Departamento de Engenharia de Pesca', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Estuda sistemas de captura, criação e processamento de pescados. Atua em aquicultura, gestão de recursos pesqueiros e maricultura.', orgs:[ {name:'CA de Pesca', type:'Centro Acadêmico', icon:'🏛️'} ], links: { grade: '#', fluxo: '#', coord: '#' } },
+  { id:'metalurgica', icon:'⛏️', name:'Engenharia Metalúrgica', dept:'Departamento de Engenharia Metalúrgica e de Materiais', duration:'10 semestres', turno:'Integral', color:'gold', tags:['Integral','10 sem'], desc:'Domínio de toda a cadeia produtiva dos metais (siderurgia, aquisição, operação, integridade de equipamentos) aliando gestão e sustentabilidade.', orgs:[ {name:'PET Eng. Metalúrgica', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petmetalufc/'}}, {name:'Metal Soluções', type:'Empresa Júnior', icon:'💼', links:{instagram:'https://www.instagram.com/metalsolucoesjr/'}} ], links: { grade: 'https://metalurgica.ufc.br/wp-content/uploads/2023/02/Estrutura-Curricular-2023.1.pdf', fluxo: 'https://metalurgica.ufc.br/wp-content/uploads/2023/02/Fluxograma-2023.1.pdf', coord: 'https://metalurgica.ufc.br/pt/' } },
+  { id:'energias', icon:'☀️', name:'Engenharia de Energias Renováveis', dept:'Departamento de Energia', duration:'10 semestres', turno:'Integral', color:'green', tags:['Integral','10 sem'], desc:'Projeta e gerencia sistemas de energia solar, eólica, biomassa e outras fontes sustentáveis, com forte conexão com o hub de Hidrogênio Verde do Ceará.', orgs:[ {name:'PET Energias', type:'Programa PET', icon:'📚', links:{instagram:'https://www.instagram.com/petenergias/', site:'https://sites.google.com/view/petenergiasufc/home', linkedin:'https://www.linkedin.com/company/pet-energias-ufc/'}}, {name:'CAEER', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/caeer.ufc/'}} ], links: { grade: 'https://www.si3.ufc.br/sigaa/public/curso/matriz.jsf?lc=pt_BR&id=6553891', fluxo: 'https://www.si3.ufc.br/sigaa/public/curso/fluxograma.jsf?lc=pt_BR&id=6553891', coord: 'https://prograd.ufc.br/pt/cursos-de-graduacao/engenharia-de-energias-renovaveis-fortaleza/' } },
+  { id:'alimentos', icon:'🌾', name:'Engenharia de Alimentos', dept:'Departamento de Tecnologia de Alimentos', duration:'10 semestres', turno:'Integral', color:'gold', tags:['Integral','10 sem'], desc:'Desenvolve e controla processos de produção, conservação e distribuição de alimentos. Atua em indústrias alimentícias, controle de qualidade e pesquisa.', orgs:[ {name:'CA de Alimentos', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/caealimentosufc/'}} ], links: { grade: 'https://alimentos.ufc.br/wp-content/uploads/2023/02/Estrutura-Curricular-2023.1.pdf', fluxo: 'https://alimentos.ufc.br/wp-content/uploads/2023/02/Fluxograma-2023.1.pdf', coord: 'https://alimentos.ufc.br/pt/' } },
+  { id:'pesca', icon:'🐟', name:'Engenharia de Pesca', dept:'Departamento de Engenharia de Pesca', duration:'10 semestres', turno:'Integral', color:'blue', tags:['Integral','10 sem'], desc:'Estuda sistemas de captura, criação e processamento de pescados. Atua em aquicultura, gestão de recursos pesqueiros e maricultura.', orgs:[ {name:'CA de Pesca', type:'Centro Acadêmico', icon:'🏛️', links:{instagram:'https://www.instagram.com/caep.ufc/'}} ], links: { grade: 'https://pesca.ufc.br/wp-content/uploads/2023/02/Estrutura-Curricular-2023.1.pdf', fluxo: 'https://pesca.ufc.br/wp-content/uploads/2023/02/Fluxograma-2023.1.pdf', coord: 'https://pesca.ufc.br/pt/' } },
 ];
 
 // ─── RENDER COURSES ────────────────────────────────────────────────────────────
@@ -1277,11 +1326,45 @@ function openCourseModal(id) {
         <a href="${c.links.fluxo}" target="_blank" class="modal-org"><div class="modal-org-icon">🗺️</div><div><div class="modal-org-name">Fluxograma</div><div class="modal-org-type">Ordem recomendada das disciplinas</div></div><div class="modal-org-link">Ver →</div></a>
         <a href="${c.links.coord}" target="_blank" class="modal-org"><div class="modal-org-icon">🏢</div><div><div class="modal-org-name">Coordenação do Curso</div><div class="modal-org-type">Contatos e informações oficiais</div></div><div class="modal-org-link">Ver →</div></a>
       </div>
+      ${c.video ? `
+        <a href="${c.video}" target="_blank" class="modal-video-link">
+          <span style="font-size:1.5rem">▶️</span>
+          <span>Assista ao vídeo de apresentação do curso</span>
+        </a>
+      ` : ''}
     ` : `
       <div class="modal-placeholder">
         📋 As informações detalhadas sobre grade curricular, laboratórios, fluxograma e coordenação serão preenchidas em breve.<br>
       </div>
     `}
+
+    ${c.areas ? `
+      <div class="modal-section-title" style="margin-top:28px;">🎯 Principais Áreas de Atuação</div>
+      <ul class="modal-list">
+        ${c.areas.map(area => `<li>${area}</li>`).join('')}
+      </ul>
+    ` : ''}
+
+    ${c.labs ? `
+      <div class="modal-section-title">🔬 Laboratórios e Pesquisa</div>
+      <div class="modal-labs">
+        ${c.labs.map(lab => `
+          <div class="modal-lab-card">
+            <img src="${lab.img}" alt="${lab.name}" loading="lazy">
+            <div class="modal-lab-content">
+              <div class="modal-lab-name">${lab.name}</div>
+              <div class="modal-lab-desc">${lab.desc}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    ` : ''}
+
+    ${c.empresas ? `
+      <div class="modal-section-title">🏢 Empresas que Contratam</div>
+      <p style="font-size:.9rem;color:var(--text-soft);line-height:1.7;margin-bottom:28px;">${c.empresas.join(', ')}.</p>
+    ` : ''}
+
   `;
   document.getElementById('course-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
